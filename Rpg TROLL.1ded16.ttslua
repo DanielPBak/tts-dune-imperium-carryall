@@ -1,0 +1,69 @@
+RED_VP_TRAY = "e0ed4b"
+GREEN_VP_TRAY = "caaba4"
+YELLOW_VP_TRAY = "99a860"
+BLUE_VP_TRAY = "121bb6"
+
+function printvp(color, guid)
+    local obj = getObjectFromGUID(guid)
+    local score = obj.call("getScore")
+    print(color .. " score: " .. score)
+end
+
+function reportResults()
+    print("reporting results")
+
+    local allPlayers = Player.getPlayers()
+    for _, player in ipairs(allPlayers) do
+        if player.seated then
+            log("color: " .. player.color)
+            log("steam_name: " .. player.steam_name)
+            log("steam_id: " .. player.steam_id)
+        end
+    end
+--    UI.setAttribute("firstPlace", "text", "foo")
+--    UI.setAttribute("firstPlace", "text", getObjectFromGUID(RED_VP_TRAY).call("getScore"))
+--    UI.setAttribute("secondPlace", "text", getObjectFromGUID(BLUE_VP_TRAY).call("getScore"))
+--    UI.setAttribute("thirdPlace", "text", getObjectFromGUID(YELLOW_VP_TRAY).call("getScore"))
+--    UI.setAttribute("fourthPlace", "text", getObjectFromGUID(GREEN_VP_TRAY).call("getScore"))
+
+end
+
+function formCallback(request)
+    print("formCallback")
+    if request.is_error then
+        print('there was an error!')
+        print(request.text)
+        log(request.text)
+    else
+        print('form was submitted successfully')
+    end
+end
+
+function sendForm()
+    local infoTable = {
+        ["entry.1770843937"] = "tts_aaa_005",
+        ["entry.826495039"] = "tts_bbb_005",
+        ["entry.179618972"] = "tts_ccc_005"
+    }
+    WebRequest.post("https://docs.google.com/forms/u/0/d/e/1FAIpQLSfD6MTMYaUKEYZy659HqRUdhBKqbvjFOeldII-qmXqrZQkMSw/formResponse",
+    infoTable, formCallback)
+end
+
+function close()
+--    UI.hide("Window")
+end
+
+function minimize(player, value, id)
+--    if (tonumber(UI.getAttribute("Window", "Height")) > tonumber(UI.getAttribute("TopBar", "Height"))) then
+--        -- shrink
+--        -- 135 is (Height - Height_of_Top_Bar) / 2
+--        UI.setAttribute("Window", "OffsetXY", "0 135")
+--        UI.setAttribute("Window", "Height", tonumber(UI.getAttribute("TopBar", "Height")))
+--        UI.setAttribute("report", "active", false)
+--    else
+--        -- grow
+--        UI.setAttribute("Window", "OffsetXY", "0 0")
+--        UI.setAttribute("Window", "Height", 300)
+--        UI.setAttribute("report", "active", true)
+--    end
+end

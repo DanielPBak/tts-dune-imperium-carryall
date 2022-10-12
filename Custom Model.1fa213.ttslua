@@ -10,28 +10,66 @@ function onLoad()
 
     UI.setXml([[
 <Defaults>
-    <Panel class="Window" width="800" height="600" color="#696969ff" allowDragging="True" returnToOriginalPositionWhenReleased="false" rectAlignment="MiddleRight" outline="#404040"/>
-    <Button class="buttons" width="80" height="40" rectAlignment="UpperLeft" color="#aaaaaa"/>
-    <Text class="alltext" color="#ffddff"/>
+    <Panel class="Window" width="800" height="600" color="#696969ff" allowDragging="True"
+        returnToOriginalPositionWhenReleased="false" outline="#404040"/>
+    <Button fontSize="20" width="80" height="40" color="#449944" textColor="#eeeeee"/>
+    <Text alignment="MiddleCenter" fontSize="20" color="white"/>
+    <Cell class="c2" alignment="MiddleCenter" fontSize="20" color="#223322"/>
 </Defaults>
 
 <Panel class="Window" id="Window">
-    <TableLayout>
-        <Row><Cell><Text class="alltext">FIRST PLACE</Text></Cell><Cell><Text id="firstPlace">...</Text></Cell></Row>
-        <Row><Cell><Text class="alltext">SECOND PLACE</Text></Cell><Cell><Text id="secondPlace">...</Text></Cell></Row>
-        <Row><Cell><Text class="alltext">THIRD PLACE</Text></Cell><Cell><Text id="thirdPlace">...</Text></Cell></Row>
-        <Row><Cell><Text class="alltext">FOURTH PLACE</Text></Cell><Cell><Text id="fourthPlace">...</Text></Cell></Row>
+        <TableLayout>
         <Row>
-        <Cell><Button id="report" class="buttons" color="#449944" textColor="#eeeeee" text="report" onClick="1fa213/reportResults"/></Cell>
-        <Cell><Button id="submitForm" class="buttons" color="#449944" textColor="#eeeeee" text="submit" onClick="1fa213/sendForm"/></Cell>
+            <Cell><Text>BATTLE REPORT</Text></Cell>
+            <Cell><Button id="fetch" text="Fetch Results" onClick="1fa213/reportResults"/></Cell>
+            <Cell><Button id="submit" text="Submit!" onClick="1fa213/sendForm"/></Cell>
+        </Row>
+        <Row>
+            <Cell><Text>rank</Text></Cell>
+            <Cell><Text>color</Text></Cell>
+            <Cell><Text>points</Text></Cell>
+            <Cell><Text>steam name</Text></Cell>
+            <Cell><Text>steam id</Text></Cell>
+        </Row>
+
+        <Row>
+            <Cell><Text>1st</Text></Cell>
+            <Cell><Text id="color1"></Text></Cell>
+            <Cell><Text id="points1"></Text></Cell>
+            <Cell><Text id="name1"></Text></Cell>
+            <Cell><Text id="id1"></Text></Cell>
+        </Row>
+
+        <Row>
+            <Cell><Text>2nd</Text></Cell>
+            <Cell><Text id="color2"></Text></Cell>
+            <Cell><Text id="points2"></Text></Cell>
+            <Cell><Text id="name2"></Text></Cell>
+            <Cell><Text id="id2"></Text></Cell>
+            </Row>
+
+        <Row>
+            <Cell><Text>3rd</Text></Cell>
+            <Cell><Text id="color3"></Text></Cell>
+            <Cell><Text id="points3"></Text></Cell>
+            <Cell><Text id="name3"></Text></Cell>
+            <Cell><Text id="id3"></Text></Cell>
+        </Row>
+
+        <Row>
+            <Cell><Text>4th</Text></Cell>
+            <Cell><Text id="color4"></Text></Cell>
+            <Cell><Text id="points4"></Text></Cell>
+            <Cell><Text id="name4"></Text></Cell>
+            <Cell><Text id="id4"></Text></Cell>
         </Row>
     </TableLayout>
 </Panel>
 ]])
+    --reportResults()
 end
 
 function formCallback(request)
-    print("formCallback")
     if request.is_error then
         print('there was an error!')
         print(request.text)
@@ -53,29 +91,38 @@ end
 
 function reportResults()
     print("reporting results")
+    results = { }
     local allPlayers = Player.getPlayers()
     for _, player in ipairs(allPlayers) do
         if player.seated then
-            print("color: " .. player.color)
-            print("steam_name: " .. player.steam_name)
-            print("steam_id: " .. player.steam_id)
+            local tray = ""
+            if player.color == "Red" then tray = RED_VP_TRAY
+            elseif player.color == "Blue" then tray = BLUE_VP_TRAY
+            elseif player.color == "Yellow" then tray = YELLOW_VP_TRAY
+            elseif player.color == "Green" then tray = GREEN_VP_TRAY
+            else print('fatal error!') end
+            table.insert(results, { player.color, getObjectFromGUID(tray).call("getScore"),
+                player.steam_name, player.steam_id } )
         end
     end
+    table.sort(results, function (left, right) return left[2] > right[2] end)
+    UI.setAttribute("color1", "text", results[1][1])
+    UI.setAttribute("points1", "text", results[1][2])
+    UI.setAttribute("name1", "text", results[1][3])
+    UI.setAttribute("id1", "text", results[1][4])
 
-    results = {
-        { 'red', getObjectFromGUID(RED_VP_TRAY).call("getScore") },
-        { 'blue', getObjectFromGUID(BLUE_VP_TRAY).call("getScore") },
-        { 'yellow', getObjectFromGUID(YELLOW_VP_TRAY).call("getScore") },
-        { 'green', getObjectFromGUID(GREEN_VP_TRAY).call("getScore") }
-    }
-    table.sort(results, function (left, right)
-            return left[2] > right[2]
-        end)
-    UI.setAttribute("firstPlace", "text", results[1][1])
-    UI.setAttribute("secondPlace", "text", results[2][1])
-    UI.setAttribute("thirdPlace", "text", results[3][1])
-    UI.setAttribute("fourthPlace", "text", results[4][1])
-    for _, b in ipairs(results) do
-        print(b[1] .. ' -> ' .. b[2])
-    end
+    UI.setAttribute("color2", "text", results[2][1])
+    UI.setAttribute("points2", "text", results[2][2])
+    UI.setAttribute("name2", "text", results[2][3])
+    UI.setAttribute("id2", "text", results[2][4])
+
+    UI.setAttribute("color3", "text", results[3][1])
+    UI.setAttribute("points3", "text", results[3][2])
+    UI.setAttribute("name3", "text", results[3][3])
+    UI.setAttribute("id3", "text", results[3][4])
+
+    UI.setAttribute("color4", "text", results[4][1])
+    UI.setAttribute("points4", "text", results[4][2])
+    UI.setAttribute("name4", "text", results[4][3])
+    UI.setAttribute("id4", "text", results[4][4])
 end

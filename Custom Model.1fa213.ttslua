@@ -1,0 +1,81 @@
+RED_VP_TRAY = "e0ed4b"
+GREEN_VP_TRAY = "caaba4"
+YELLOW_VP_TRAY = "99a860"
+BLUE_VP_TRAY = "121bb6"
+
+function onLoad()
+    self.setScale({0.10, 0.10, 0.10})
+    self.setRotation({277.99, 285.03, 179.97})
+    self.setPosition({12, 0, -18})
+
+    UI.setXml([[
+<Defaults>
+    <Panel class="Window" width="800" height="600" color="#696969ff" allowDragging="True" returnToOriginalPositionWhenReleased="false" rectAlignment="MiddleRight" outline="#404040"/>
+    <Button class="buttons" width="80" height="40" rectAlignment="UpperLeft" color="#aaaaaa"/>
+    <Text class="alltext" color="#ffddff"/>
+</Defaults>
+
+<Panel class="Window" id="Window">
+    <TableLayout>
+        <Row><Cell><Text class="alltext">FIRST PLACE</Text></Cell><Cell><Text id="firstPlace">...</Text></Cell></Row>
+        <Row><Cell><Text class="alltext">SECOND PLACE</Text></Cell><Cell><Text id="secondPlace">...</Text></Cell></Row>
+        <Row><Cell><Text class="alltext">THIRD PLACE</Text></Cell><Cell><Text id="thirdPlace">...</Text></Cell></Row>
+        <Row><Cell><Text class="alltext">FOURTH PLACE</Text></Cell><Cell><Text id="fourthPlace">...</Text></Cell></Row>
+        <Row>
+        <Cell><Button id="report" class="buttons" color="#449944" textColor="#eeeeee" text="report" onClick="1fa213/reportResults"/></Cell>
+        <Cell><Button id="submitForm" class="buttons" color="#449944" textColor="#eeeeee" text="submit" onClick="1fa213/sendForm"/></Cell>
+        </Row>
+    </TableLayout>
+</Panel>
+]])
+end
+
+function formCallback(request)
+    print("formCallback")
+    if request.is_error then
+        print('there was an error!')
+        print(request.text)
+        log(request.text)
+    else
+        print('form was submitted successfully')
+    end
+end
+
+function sendForm()
+    local infoTable = {
+        ["entry.1770843937"] = "tts_aaa_005",
+        ["entry.826495039"] = "tts_bbb_005",
+        ["entry.179618972"] = "tts_ccc_005"
+    }
+    WebRequest.post("https://docs.google.com/forms/u/0/d/e/1FAIpQLSfD6MTMYaUKEYZy659HqRUdhBKqbvjFOeldII-qmXqrZQkMSw/formResponse",
+    infoTable, formCallback)
+end
+
+function reportResults()
+    print("reporting results")
+    local allPlayers = Player.getPlayers()
+    for _, player in ipairs(allPlayers) do
+        if player.seated then
+            print("color: " .. player.color)
+            print("steam_name: " .. player.steam_name)
+            print("steam_id: " .. player.steam_id)
+        end
+    end
+
+    results = {
+        { 'red', getObjectFromGUID(RED_VP_TRAY).call("getScore") },
+        { 'blue', getObjectFromGUID(BLUE_VP_TRAY).call("getScore") },
+        { 'yellow', getObjectFromGUID(YELLOW_VP_TRAY).call("getScore") },
+        { 'green', getObjectFromGUID(GREEN_VP_TRAY).call("getScore") }
+    }
+    table.sort(results, function (left, right)
+            return left[2] > right[2]
+        end)
+    UI.setAttribute("firstPlace", "text", results[1][1])
+    UI.setAttribute("secondPlace", "text", results[2][1])
+    UI.setAttribute("thirdPlace", "text", results[3][1])
+    UI.setAttribute("fourthPlace", "text", results[4][1])
+    for _, b in ipairs(results) do
+        print(b[1] .. ' -> ' .. b[2])
+    end
+end

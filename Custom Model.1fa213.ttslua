@@ -1,6 +1,7 @@
 trayList = { }
 
 function onLoad()
+    --print(self.guid)
     self.setScale({0.10, 0.10, 0.10})
     self.setRotation({277.99, 285.03, 179.97})
     self.setPosition({12, 0, -18})
@@ -21,11 +22,12 @@ function onLoad()
     <Panel class="yellow" color="#aaaa22"/>
     <Panel class="blue" color="#2222aa"/>
     <Text fontSize="20" color="white"/>
-    <InputField characterValidation="Integer" textColor="black" text="0" fontSize="20" alignment="MiddleCenter"/>
+    <InputField onValueChanged="1fa213/changeValue" characterValidation="Integer" textColor="black" text="0" fontSize="20" alignment="MiddleCenter"/>
     <InputField class="red2" color="#cc4444"/>
     <InputField class="green2" color="#44aa44"/>
     <InputField class="yellow2" color="#cccc44"/>
     <InputField class="blue2" color="#4444cc"/>
+    <Button textColor="white" fontSize="20"/>
 </Defaults>
 
 <Panel class="Window" id="Window">
@@ -33,41 +35,36 @@ function onLoad()
         <Row>
             <Cell><Panel class="header"><Text>RANK</Text></Panel></Cell>
             <Cell><Panel class="header"><Text>VPS</Text></Panel></Cell>
-            <Cell><Panel class="header"><Text>COLOR</Text></Panel></Cell>
             <Cell><Panel class="header"><Text>STEAM NAME</Text></Panel></Cell>
             <Cell><Panel class="header"><Text>STEAM ID</Text></Panel></Cell>
         </Row>
         <Row>
             <Cell><InputField class="red2" id="rank_red"/></Cell>
             <Cell><InputField class="red2" id="points_red"/></Cell>
-            <Cell><Panel class="red"><Text id="color_red"></Text></Panel></Cell>
             <Cell><Panel class="red"><Text id="name_red"></Text></Panel></Cell>
             <Cell><Panel class="red"><Text id="id_red"></Text></Panel></Cell>
         </Row>
         <Row>
             <Cell><InputField class="green2" id="rank_green"/></Cell>
             <Cell><InputField class="green2" id="points_green"/></Cell>
-            <Cell><Panel class="green"><Text id="color_green"></Text></Panel></Cell>
             <Cell><Panel class="green"><Text id="name_green"></Text></Panel></Cell>
             <Cell><Panel class="green"><Text id="id_green"></Text></Panel></Cell>
         </Row>
         <Row>
             <Cell><InputField class="yellow2" id="rank_yellow"/></Cell>
             <Cell><InputField class="yellow2" id="points_yellow"/></Cell>
-            <Cell><Panel class="yellow"><Text id="color_yellow"></Text></Panel></Cell>
             <Cell><Panel class="yellow"><Text id="name_yellow"></Text></Panel></Cell>
             <Cell><Panel class="yellow"><Text id="id_yellow"></Text></Panel></Cell>
         </Row>
         <Row>
             <Cell><InputField class="blue2" id="rank_blue"/></Cell>
             <Cell><InputField class="blue2" id="points_blue"/></Cell>
-            <Cell><Panel class="blue"><Text id="color_blue"></Text></Panel></Cell>
             <Cell><Panel class="blue"><Text id="name_bank"></Text></Panel></Cell>
             <Cell><Panel class="blue"><Text id="id_blue"></Text></Panel></Cell>
         </Row>
         <Row>
             <Cell><Button id="close" color="#666622" text="Close" onClick="1fa213/close"/></Cell>
-            <Cell/><Cell/>
+            <Cell/>
             <Cell><Button id="fetch" color="#226666" text="Refresh Results" onClick="1fa213/reportResults"/></Cell>
             <Cell><Button id="submit" color="#226622" text="Submit!" onClick="1fa213/sendForm"/></Cell>
         </Row>
@@ -75,6 +72,10 @@ function onLoad()
 </Panel>
 ]])
     reportResults()
+end
+
+function changeValue(player, value, element)
+    UI.setAttribute(element, "text", value)
 end
 
 function close()
@@ -89,18 +90,31 @@ function formCallback(request)
     else
         print('form was submitted successfully')
         UI.setAttribute("submit", "interactable", "false")
-        UI.setAttribute("submit", "color", "black")
-        UI.setAttribute("submit", "textColor", "black")
+        UI.setAttribute("submit", "color", "purple")
+        UI.setAttribute("submit", "textColor", "yellow")
+        UI.setAttribute("submit", "text", "SUCCESS!")
     end
 end
 
-function sendForm()
+function sendForm(submitter)
+    local conflictCardZone = getObjectFromGUID('07e239')
+    local conflictCards = conflictCardZone.getObjects()[1]
+    local round = 10
+    if conflictCards ~= nil then
+        if conflictCards.tag == 'Deck' then
+            local cards = conflictCards.getObjects()
+            round = 10 - #cards
+        elseif conflictCards.tag == 'Card' then
+            round = 9
+        end
+    end
+
     local infoTable = {
         ["entry.2126893034"] = "1", --is_ranked
-        ["entry.1195859029"] = "submitter steam id", --submitter_steam_id
-        ["entry.980559040"] = "submitter steam name", --submitter_steam_name
+        ["entry.1195859029"] = submitter.steam_id, --submitter_steam_id
+        ["entry.980559040"] = submitter.steam_name, --submitter_steam_name
         ["entry.779373663"] = "game start timestamp", --game_start_timestamp
-        ["entry.234195300"] = "6", --n_rounds
+        ["entry.234195300"] = round, --n_rounds
 
         -- p1 is RED
         ["entry.82402215"] = UI.getAttribute("id_red", "text"), --p1_steam_id
@@ -160,8 +174,8 @@ function sendForm()
 end
 
 function reportResults()
-    results = { }
     local playerCount = 0
+    if results == nil then results = { } end
     for _, player in ipairs(Player.getPlayers()) do
         if player.seated then
             results[player.color] = { }
@@ -193,25 +207,21 @@ function reportResults()
         results[value["color"]]["rank"] = rank
     end
 
-    UI.setAttribute("color_red", "text", results["Red"]["color"])
     UI.setAttribute("points_red", "text", results["Red"]["points"])
     UI.setAttribute("name_red", "text", results["Red"]["name"])
     UI.setAttribute("id_red", "text", results["Red"]["id"])
     UI.setAttribute("rank_red", "text", results["Red"]["rank"])
 
-    UI.setAttribute("color_green", "text", results["Green"]["color"])
     UI.setAttribute("points_green", "text", results["Green"]["points"])
     UI.setAttribute("name_green", "text", results["Green"]["name"])
     UI.setAttribute("id_green", "text", results["Green"]["id"])
     UI.setAttribute("rank_green", "text", results["Green"]["rank"])
 
-    UI.setAttribute("color_yellow", "text", results["Yellow"]["color"])
     UI.setAttribute("points_yellow", "text", results["Yellow"]["points"])
     UI.setAttribute("name_yellow", "text", results["Yellow"]["name"])
     UI.setAttribute("id_yellow", "text", results["Yellow"]["id"])
     UI.setAttribute("rank_yellow", "text", results["Yellow"]["rank"])
 
-    UI.setAttribute("color_blue", "text", results["Blue"]["color"])
     UI.setAttribute("points_blue", "text", results["Blue"]["points"])
     UI.setAttribute("name_bank", "text", results["Blue"]["name"])
     UI.setAttribute("id_blue", "text", results["Blue"]["id"])

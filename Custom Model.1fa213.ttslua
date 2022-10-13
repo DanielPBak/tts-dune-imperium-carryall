@@ -1,13 +1,15 @@
-RED_VP_TRAY = "e0ed4b"
-GREEN_VP_TRAY = "caaba4"
-YELLOW_VP_TRAY = "99a860"
-BLUE_VP_TRAY = "121bb6"
+trayList = { }
 
 function onLoad()
     self.setScale({0.10, 0.10, 0.10})
     self.setRotation({277.99, 285.03, 179.97})
     self.setPosition({12, 0, -18})
     self.setLock(true)
+
+    trayList["Red"] = getObjectFromGUID("e0ed4b")
+    trayList["Green"] = getObjectFromGUID("caaba4")
+    trayList["Yellow"] = getObjectFromGUID("99a860")
+    trayList["Blue"] = getObjectFromGUID("121bb6")
 
     UI.setXml([[
 <Defaults>
@@ -18,44 +20,48 @@ function onLoad()
     <Panel class="green" color="#228822"/>
     <Panel class="yellow" color="#aaaa22"/>
     <Panel class="blue" color="#2222aa"/>
-    <Button fontSize="20" width="20" height="10" textColor="#eeeeee"/>
-    <Text alignment="MiddleCenter" fontSize="20" color="white"/>
+    <Text fontSize="20" color="white"/>
+    <InputField characterValidation="Integer" textColor="black" text="0" fontSize="20" alignment="MiddleCenter"/>
+    <InputField class="red2" color="#cc4444"/>
+    <InputField class="green2" color="#44aa44"/>
+    <InputField class="yellow2" color="#cccc44"/>
+    <InputField class="blue2" color="#4444cc"/>
 </Defaults>
 
 <Panel class="Window" id="Window">
-        <TableLayout>
+    <TableLayout>
         <Row>
             <Cell><Panel class="header"><Text>RANK</Text></Panel></Cell>
+            <Cell><Panel class="header"><Text>VPS</Text></Panel></Cell>
             <Cell><Panel class="header"><Text>COLOR</Text></Panel></Cell>
-            <Cell><Panel class="header"><Text>POINTS</Text></Panel></Cell>
             <Cell><Panel class="header"><Text>STEAM NAME</Text></Panel></Cell>
             <Cell><Panel class="header"><Text>STEAM ID</Text></Panel></Cell>
         </Row>
         <Row>
-            <Cell><Panel class="red"><Text id="rank_red"></Text></Panel></Cell>
+            <Cell><InputField class="red2" id="rank_red"/></Cell>
+            <Cell><InputField class="red2" id="points_red"/></Cell>
             <Cell><Panel class="red"><Text id="color_red"></Text></Panel></Cell>
-            <Cell><Panel class="red"><Text id="points_red"></Text></Panel></Cell>
             <Cell><Panel class="red"><Text id="name_red"></Text></Panel></Cell>
             <Cell><Panel class="red"><Text id="id_red"></Text></Panel></Cell>
         </Row>
         <Row>
-            <Cell><Panel class="green"><Text id="rank_green"></Text></Panel></Cell>
+            <Cell><InputField class="green2" id="rank_green"/></Cell>
+            <Cell><InputField class="green2" id="points_green"/></Cell>
             <Cell><Panel class="green"><Text id="color_green"></Text></Panel></Cell>
-            <Cell><Panel class="green"><Text id="points_green"></Text></Panel></Cell>
             <Cell><Panel class="green"><Text id="name_green"></Text></Panel></Cell>
             <Cell><Panel class="green"><Text id="id_green"></Text></Panel></Cell>
         </Row>
         <Row>
-            <Cell><Panel class="yellow"><Text id="rank_yellow"></Text></Panel></Cell>
+            <Cell><InputField class="yellow2" id="rank_yellow"/></Cell>
+            <Cell><InputField class="yellow2" id="points_yellow"/></Cell>
             <Cell><Panel class="yellow"><Text id="color_yellow"></Text></Panel></Cell>
-            <Cell><Panel class="yellow"><Text id="points_yellow"></Text></Panel></Cell>
             <Cell><Panel class="yellow"><Text id="name_yellow"></Text></Panel></Cell>
             <Cell><Panel class="yellow"><Text id="id_yellow"></Text></Panel></Cell>
         </Row>
         <Row>
-            <Cell><Panel class="blue"><Text id="rank_blue"></Text></Panel></Cell>
+            <Cell><InputField class="blue2" id="rank_blue"/></Cell>
+            <Cell><InputField class="blue2" id="points_blue"/></Cell>
             <Cell><Panel class="blue"><Text id="color_blue"></Text></Panel></Cell>
-            <Cell><Panel class="blue"><Text id="points_blue"></Text></Panel></Cell>
             <Cell><Panel class="blue"><Text id="name_bank"></Text></Panel></Cell>
             <Cell><Panel class="blue"><Text id="id_blue"></Text></Panel></Cell>
         </Row>
@@ -155,84 +161,59 @@ end
 
 function reportResults()
     results = { }
-    local tray = ""
-    local slot = 0
-    local allPlayers = Player.getPlayers()
-    for _, player in ipairs(allPlayers) do
-        tray = ""
+    local playerCount = 0
+    for _, player in ipairs(Player.getPlayers()) do
         if player.seated then
-            if player.color == "Red" then
-                slot = 1
-                tray = RED_VP_TRAY
-            elseif player.color == "Green" then
-                slot = 2
-                tray = GREEN_VP_TRAY
-            elseif player.color == "Yellow" then
-                slot = 3
-                tray = YELLOW_VP_TRAY
-            elseif player.color == "Blue" then
-                slot = 4
-                tray = BLUE_VP_TRAY
-            end
-            if tray != "" then
-                results[slot] = {
-                    player.color,
-                    getObjectFromGUID(tray).call("getScore") - 1,
-                    player.steam_name,
-                    player.steam_id,
-                    -1
-                 }
-            end
+            results[player.color] = { }
+            results[player.color]["rank"] = -1
+            results[player.color]["points"] = trayList[player.color].call("getScore") - 1
+            results[player.color]["color"] = player.color
+            results[player.color]["name"] = player.steam_name
+            results[player.color]["id"] = player.steam_id
+            playerCount = playerCount + 1
         end
     end
 
-    if #results < 4 then
-        print("not enough players!")
+    if playerCount < 4 then
+        if playerCount > 0 then
+            print("not enough players!")
+        end
         return
     end
 
-    for _, player in ipairs(results) do
-    end
-
+    -- tables can't be sorted so we copy the values into an array
     local sortedResults = { }
-    for k, v in pairs(results) do sortedResults[k] = v end
+    for _, value in pairs(results) do
+        table.insert(sortedResults, value)
+    end
+    table.sort(sortedResults, function (left, right) return left["points"] > right["points"] end)
 
-    table.sort(sortedResults, function (left, right) return left[2] > right[2] end)
-    local idx = 1
-    for _, player in ipairs(sortedResults) do
-        if player[1] == "Red" then results[1][5] = idx
-        elseif player[1] == "Green" then results[2][5] = idx
-        elseif player[1] == "Yellow" then results[3][5] = idx
-        elseif player[1] == "Blue" then results[4][5] = idx
-        end
-        idx = idx + 1
+    -- now we can extract the rankings
+    for rank, value in pairs(sortedResults) do
+        results[value["color"]]["rank"] = rank
     end
 
-    -- red
-    UI.setAttribute("color_red", "text", results[1][1])
-    UI.setAttribute("points_red", "text", results[1][2])
-    UI.setAttribute("name_red", "text", results[1][3])
-    UI.setAttribute("id_red", "text", results[1][4])
-    UI.setAttribute("rank_red", "text", results[1][5])
+    UI.setAttribute("color_red", "text", results["Red"]["color"])
+    UI.setAttribute("points_red", "text", results["Red"]["points"])
+    UI.setAttribute("name_red", "text", results["Red"]["name"])
+    UI.setAttribute("id_red", "text", results["Red"]["id"])
+    UI.setAttribute("rank_red", "text", results["Red"]["rank"])
 
-    -- green
-    UI.setAttribute("color_green", "text", results[2][1])
-    UI.setAttribute("points_green", "text", results[2][2])
-    UI.setAttribute("name_green", "text", results[2][3])
-    UI.setAttribute("id_green", "text", results[2][4])
-    UI.setAttribute("rank_green", "text", results[2][5])
+    UI.setAttribute("color_green", "text", results["Green"]["color"])
+    UI.setAttribute("points_green", "text", results["Green"]["points"])
+    UI.setAttribute("name_green", "text", results["Green"]["name"])
+    UI.setAttribute("id_green", "text", results["Green"]["id"])
+    UI.setAttribute("rank_green", "text", results["Green"]["rank"])
 
-    -- yellow
-    UI.setAttribute("color_yellow", "text", results[3][1])
-    UI.setAttribute("points_yellow", "text", results[3][2])
-    UI.setAttribute("name_yellow", "text", results[3][3])
-    UI.setAttribute("id_yellow", "text", results[3][4])
-    UI.setAttribute("rank_yellow", "text", results[3][5])
+    UI.setAttribute("color_yellow", "text", results["Yellow"]["color"])
+    UI.setAttribute("points_yellow", "text", results["Yellow"]["points"])
+    UI.setAttribute("name_yellow", "text", results["Yellow"]["name"])
+    UI.setAttribute("id_yellow", "text", results["Yellow"]["id"])
+    UI.setAttribute("rank_yellow", "text", results["Yellow"]["rank"])
 
-    -- blue
-    UI.setAttribute("color_blue", "text", results[4][1])
-    UI.setAttribute("points_blue", "text", results[4][2])
-    UI.setAttribute("name_bank", "text", results[4][3])
-    UI.setAttribute("id_blue", "text", results[4][4])
-    UI.setAttribute("rank_blue", "text", results[4][5])
+    UI.setAttribute("color_blue", "text", results["Blue"]["color"])
+    UI.setAttribute("points_blue", "text", results["Blue"]["points"])
+    UI.setAttribute("name_bank", "text", results["Blue"]["name"])
+    UI.setAttribute("id_blue", "text", results["Blue"]["id"])
+    UI.setAttribute("rank_blue", "text", results["Blue"]["rank"])
 end

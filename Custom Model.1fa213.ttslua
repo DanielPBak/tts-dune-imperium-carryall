@@ -1,5 +1,6 @@
-trayList = { }
 ressources = { }
+results = { }
+
 function onLoad()
     self.setScale({0.40, 0.40, 0.40})
     self.setRotation({0.00, 89.66, 0.00})
@@ -7,16 +8,35 @@ function onLoad()
     self.setLock(true)
     self.interactable = true
 
-    trayList["Red"] = getObjectFromGUID("e0ed4b")
-    trayList["Green"] = getObjectFromGUID("caaba4")
-    trayList["Yellow"] = getObjectFromGUID("99a860")
-    trayList["Blue"] = getObjectFromGUID("121bb6")
-    ressources = { -- 1 : épices, 2 : solaris, 3 : eau, 4 : troupes, 5 : cartes (???) , 6 : zone leader (board where leader placed), 7 : swordmaster (third maa), 8 : zone swordmaster (near leader for third maa), 9 : conseiller (high consil token), 10 : zone conseiller (high consil token zone in lansdraad), 11 : zone bonus conseiller (2 persuasion zone form high consil)
-        ["Red"] = {getObjectFromGUID("3074d4"),getObjectFromGUID("576ccd"),getObjectFromGUID("692c4d"),getObjectFromGUID("8ea4af"),getObjectFromGUID("3a9e65"),getObjectFromGUID("66cdbb"),getObjectFromGUID("ed3490"),{-18.85, 1.71, 18.78},getObjectFromGUID("f19a48"),{-0.83, 3, 9.52},{-28.10, 2, 6.11}},
-        ["Blue"] = {getObjectFromGUID("9cc286"),getObjectFromGUID("fa5236"),getObjectFromGUID("0afaeb"),getObjectFromGUID("b71dd9"),getObjectFromGUID("a0bb82"),getObjectFromGUID("681774"),getObjectFromGUID("a78ad7"),{-18.94, 1.71, -3.20},getObjectFromGUID("f5b14a"),{-1.57, 3, 9.52},{-28.25, 2, -15.73}},
-        ["Green"] = {getObjectFromGUID("22478f"),getObjectFromGUID("e597dc"),getObjectFromGUID("fa9522"),getObjectFromGUID("126c3c"),getObjectFromGUID("c7fb9b"),getObjectFromGUID("cf1486"),getObjectFromGUID("fb1629"),{19.06, 1.66, 18.61},getObjectFromGUID("a0028d"),{0.82, 3, 9.52},{28.22, 2, 6.12}},
-        ["Yellow"] = {getObjectFromGUID("78fb8a"),getObjectFromGUID("c5c4ef"),getObjectFromGUID("f217d0"),getObjectFromGUID("6af67a"),getObjectFromGUID("17a08e"),getObjectFromGUID("a677e0"),getObjectFromGUID("635c49"),{18.85, 1.65, -3.31},getObjectFromGUID("1be491"),{1.55, 1.70, 9.52},{28.23, 2, -15.97}}
-    }
+    ressources["Red"] = { }
+    ressources["Green"] = { }
+    ressources["Yellow"] = { }
+    ressources["Blue"] = { }
+
+    ressources["Red"]["vptray"] = getObjectFromGUID("e0ed4b")
+    ressources["Green"]["vptray"] = getObjectFromGUID("caaba4")
+    ressources["Yellow"]["vptray"] = getObjectFromGUID("99a860")
+    ressources["Blue"]["vptray"] = getObjectFromGUID("121bb6")
+
+    ressources["Red"]["épices"] = getObjectFromGUID("3074d4")
+    ressources["Green"]["épices"] = getObjectFromGUID("9cc286")
+    ressources["Yellow"]["épices"] = getObjectFromGUID("22478f")
+    ressources["Blue"]["épices"] = getObjectFromGUID("78fb8a")
+
+    ressources["Red"]["solari"] = getObjectFromGUID("576ccd")
+    ressources["Green"]["solari"] = getObjectFromGUID("fa5236")
+    ressources["Yellow"]["solari"] = getObjectFromGUID("e597dc")
+    ressources["Blue"]["solari"] = getObjectFromGUID("c5c4ef")
+
+    ressources["Red"]["eau"] = getObjectFromGUID("692c4d")
+    ressources["Green"]["eau"] = getObjectFromGUID("0afaeb")
+    ressources["Yellow"]["eau"] = getObjectFromGUID("fa9522")
+    ressources["Blue"]["eau"] = getObjectFromGUID("f217d0")
+
+    ressources["Red"]["leader"] = getObjectFromGUID("66cdbb")
+    ressources["Green"]["leader"] = getObjectFromGUID("681774")
+    ressources["Yellow"]["leader"] = getObjectFromGUID("cf1486")
+    ressources["Blue"]["leader"] = getObjectFromGUID("a677e0")
 
     UI.setXml([[
 <Defaults>
@@ -39,54 +59,49 @@ function onLoad()
 <Panel class="Window" id="Window">
     <TableLayout>
         <Row>
-            <Cell><Panel class="header"><Text>RANK</Text></Panel></Cell>
-            <Cell><Panel class="header"><Text>VPS</Text></Panel></Cell>
+            <Cell><Panel class="header"><Text>PLAYER</Text></Panel></Cell>
             <Cell><Panel class="header"><Text>LEADER</Text></Panel></Cell>
+            <Cell><Panel class="header"><Text>RANK</Text></Panel></Cell>
+            <Cell><Panel class="header"><Text>VPs</Text></Panel></Cell>
             <Cell><Panel class="header"><Text>SPICE</Text></Panel></Cell>
             <Cell><Panel class="header"><Text>SOLARI</Text></Panel></Cell>
             <Cell><Panel class="header"><Text>WATER</Text></Panel></Cell>
-            <Cell><Panel class="header"><Text>STEAM NAME</Text></Panel></Cell>
-            <Cell><Panel class="header"><Text>STEAM ID</Text></Panel></Cell>
         </Row>
         <Row>
+            <Cell><Panel class="red"><Text id="name_red"></Text></Panel></Cell>
+            <Cell><Panel class="red"><Text id="leader_red"></Text></Panel></Cell>
             <Cell><InputField class="red2" id="rank_red"/></Cell>
             <Cell><InputField class="red2" id="points_red"/></Cell>
-            <Cell><Panel class="red"><Text id="leader_red"></Text></Panel></Cell>
             <Cell><InputField class="red2" id="spice_red"/></Cell>
             <Cell><InputField class="red2" id="solari_red"/></Cell>
             <Cell><InputField class="red2" id="water_red"/></Cell>
-            <Cell><Panel class="red"><Text id="name_red"></Text></Panel></Cell>
-            <Cell><Panel class="red"><Text id="id_red"></Text></Panel></Cell>
         </Row>
         <Row>
+            <Cell><Panel class="green"><Text id="name_green"></Text></Panel></Cell>
+            <Cell><Panel class="green"><Text id="leader_green"></Text></Panel></Cell>
             <Cell><InputField class="green2" id="rank_green"/></Cell>
             <Cell><InputField class="green2" id="points_green"/></Cell>
-            <Cell><Panel class="green"><Text id="leader_green"></Text></Panel></Cell>
             <Cell><InputField class="green2" id="spice_green"/></Cell>
             <Cell><InputField class="green2" id="solari_green"/></Cell>
             <Cell><InputField class="green2" id="water_green"/></Cell>
-            <Cell><Panel class="green"><Text id="name_green"></Text></Panel></Cell>
-            <Cell><Panel class="green"><Text id="id_green"></Text></Panel></Cell>
         </Row>
         <Row>
+            <Cell><Panel class="yellow"><Text id="name_yellow"></Text></Panel></Cell>
+            <Cell><Panel class="yellow"><Text id="leader_yellow"></Text></Panel></Cell>
             <Cell><InputField class="yellow2" id="rank_yellow"/></Cell>
             <Cell><InputField class="yellow2" id="points_yellow"/></Cell>
-            <Cell><Panel class="yellow"><Text id="leader_yellow"></Text></Panel></Cell>
             <Cell><InputField class="yellow2" id="spice_yellow"/></Cell>
             <Cell><InputField class="yellow2" id="solari_yellow"/></Cell>
             <Cell><InputField class="yellow2" id="water_yellow"/></Cell>
-            <Cell><Panel class="yellow"><Text id="name_yellow"></Text></Panel></Cell>
-            <Cell><Panel class="yellow"><Text id="id_yellow"></Text></Panel></Cell>
         </Row>
         <Row>
+            <Cell><Panel class="blue"><Text id="name_blue"></Text></Panel></Cell>
+            <Cell><Panel class="blue"><Text id="leader_blue"></Text></Panel></Cell>
             <Cell><InputField class="blue2" id="rank_blue"/></Cell>
             <Cell><InputField class="blue2" id="points_blue"/></Cell>
-            <Cell><Panel class="blue"><Text id="leader_blue"></Text></Panel></Cell>
             <Cell><InputField class="blue2" id="spice_blue"/></Cell>
             <Cell><InputField class="blue2" id="solari_blue"/></Cell>
             <Cell><InputField class="blue2" id="water_blue"/></Cell>
-            <Cell><Panel class="blue"><Text id="name_blue"></Text></Panel></Cell>
-            <Cell><Panel class="blue"><Text id="id_blue"></Text></Panel></Cell>
         </Row>
         <Row>
             <Cell><Button id="close" color="#666622" text="Close" onClick="]]..self.guid..[[/close"/></Cell>
@@ -110,11 +125,10 @@ end
 
 function formCallback(request)
     if request.is_error then
-        print('there was an error!')
-        print(request.text)
-        log(request.text)
+        broadcastToAll('there was an error!')
+        broadcastToAll(request.text)
     else
-        print('form was submitted successfully')
+        broadcastToAll('form was submitted successfully')
         UI.setAttribute("submit", "interactable", "false")
         UI.setAttribute("submit", "color", "purple")
         UI.setAttribute("submit", "textColor", "yellow")
@@ -142,7 +156,8 @@ function sendForm(submitter)
         ["entry.234195300"] = round, --n_rounds
 
         -- p1 is RED
-        ["entry.82402215"] = UI.getAttribute("id_red", "text"), --p1_steam_id
+        --UI.getAttribute("id_red", "text")
+        ["entry.82402215"] = results["Red"]["id"], --p1_steam_id
         ["entry.1635429235"] = UI.getAttribute("name_red", "text"), --p1_steam_name
         ["entry.419710564"] = UI.getAttribute("rank_red", "text"), --p1_placement
         ["entry.1878523358"] = UI.getAttribute("points_red", "text"), --p1_total_vps
@@ -155,7 +170,8 @@ function sendForm(submitter)
         ["entry.565786681"] = UI.getAttribute("leader_red", "text"), --p1_leader
 
         -- p2 is GREEN
-        ["entry.926384740"] = UI.getAttribute("id_green", "text"), --p2_steam_id
+        --UI.getAttribute("id_green", "text")
+        ["entry.926384740"] = results["Green"]["id"], --p2_steam_id
         ["entry.8189124"] = UI.getAttribute("name_green", "text"), --p2_steam_name
         ["entry.829300525"] = UI.getAttribute("rank_green", "text"), --p2_placement
         ["entry.1498362639"] = UI.getAttribute("points_green", "text"), --p2_total_vps
@@ -168,7 +184,8 @@ function sendForm(submitter)
         ["entry.126177821"] = UI.getAttribute("leader_green", "text"), --p2_leader
 
         -- p3 is YELLOW
-        ["entry.1056344986"] = UI.getAttribute("id_yellow", "text"), --p3_steam_id
+        --UI.getAttribute("id_yellow", "text")
+        ["entry.1056344986"] = results["Yellow"]["id"], --p3_steam_id
         ["entry.1000335964"] = UI.getAttribute("name_yellow", "text"), --p3_steam_name
         ["entry.1815125303"] = UI.getAttribute("rank_yellow", "text"), --p3_placement
         ["entry.1006025268"] = UI.getAttribute("points_yellow", "text"), --p3_total_vps
@@ -181,7 +198,8 @@ function sendForm(submitter)
         ["entry.555758857"] = UI.getAttribute("leader_yellow", "text"), --p3_leader
 
         -- p4 is BLUE
-        ["entry.724137382"] = UI.getAttribute("id_blue", "text"), --p4_steam_id
+        --UI.getAttribute("id_blue", "text")
+        ["entry.724137382"] = results["Blue"]["id"], --p4_steam_id
         ["entry.79132597"] = UI.getAttribute("name_blue", "text"), --p4_steam_name
         ["entry.1095237101"] = UI.getAttribute("rank_blue", "text"), --p4_placement
         ["entry.1786102321"] = UI.getAttribute("points_blue", "text"), --p4_total_vps
@@ -197,28 +215,42 @@ function sendForm(submitter)
         infoTable, formCallback)
 end
 
+function allGood(player)
+    if not player.seated then
+        return false
+    end
+
+    local color = player.color
+    if color == "Red" or color == "Green" or color == "Yellow" or color == "Blue" then
+        return true
+    else
+        return false
+    end
+end
+
 function reportResults()
     local playerCount = 0
     if results == nil then results = { } end
     for _, player in ipairs(Player.getPlayers()) do
-        if player.seated then
-            results[player.color] = { }
-            results[player.color]["rank"] = -1
-            results[player.color]["points"] = trayList[player.color].call("getScore") - 1
-            results[player.color]["color"] = player.color
-            results[player.color]["name"] = player.steam_name
-            results[player.color]["leader"] = ressources[player.color][6].getObjects()[1].getName()
-            results[player.color]["spice"] = ressources[player.color][1].call("collectVal")
-            results[player.color]["solari"] = ressources[player.color][2].call("collectVal")
-            results[player.color]["water"] = ressources[player.color][3].call("collectVal")
-            results[player.color]["id"] = player.steam_id
+        if allGood(player) then
+            local color = player.color
+            results[color] = { }
+            results[color]["rank"] = -1
+            results[color]["points"] = ressources[color]["vptray"].call("getScore") - 1
+            results[color]["color"] = color
+            results[color]["name"] = player.steam_name
+            results[color]["leader"] = ressources[color]["leader"].getObjects()[1].getName()
+            results[color]["spice"] = ressources[color]["épices"].call("collectVal")
+            results[color]["solari"] = ressources[color]["solari"].call("collectVal")
+            results[color]["water"] = ressources[color]["eau"].call("collectVal")
+            results[color]["id"] = player.steam_id
             playerCount = playerCount + 1
         end
     end
 
     if playerCount < 4 then
         if playerCount > 0 then
-            print("not enough players!")
+            broadcastToAll("not enough players!")
         end
         return
     end

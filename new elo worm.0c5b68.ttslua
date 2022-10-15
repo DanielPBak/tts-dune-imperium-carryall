@@ -34,9 +34,9 @@ function onLoad()
     ressources["Blue"]["eau"] = getObjectFromGUID("f217d0")
 
     ressources["Red"]["leader"] = getObjectFromGUID("66cdbb")
-    ressources["Green"]["leader"] = getObjectFromGUID("681774")
-    ressources["Yellow"]["leader"] = getObjectFromGUID("cf1486")
-    ressources["Blue"]["leader"] = getObjectFromGUID("a677e0")
+    ressources["Green"]["leader"] = getObjectFromGUID("cf1486")
+    ressources["Yellow"]["leader"] = getObjectFromGUID("a677e0")
+    ressources["Blue"]["leader"] = getObjectFromGUID("681774")
 
     UI.setXml([[
 <Defaults>

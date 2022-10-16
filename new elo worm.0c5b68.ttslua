@@ -154,6 +154,7 @@ function sendForm(submitter)
     end
     local infoTable = {
         ["entry.2126893034"] = "1", --is_ranked
+        ["entry.40772176"] = "1", -- carryall_version. Increment this value by 1 each release.
         ["entry.1195859029"] = submitter.steam_id, --submitter_steam_id
         ["entry.980559040"] = submitter.steam_name, --submitter_steam_name
         ["entry.779373663"] = "game start timestamp", --game_start_timestamp

@@ -19,24 +19,24 @@ function onLoad()
     ressources["Blue"]["vptray"] = getObjectFromGUID("121bb6")
 
     ressources["Red"]["épices"] = getObjectFromGUID("3074d4")
-    ressources["Green"]["épices"] = getObjectFromGUID("9cc286")
-    ressources["Yellow"]["épices"] = getObjectFromGUID("22478f")
-    ressources["Blue"]["épices"] = getObjectFromGUID("78fb8a")
+    ressources["Green"]["épices"] = getObjectFromGUID("22478f")
+    ressources["Yellow"]["épices"] = getObjectFromGUID("78fb8a")
+    ressources["Blue"]["épices"] = getObjectFromGUID("9cc286")
 
     ressources["Red"]["solari"] = getObjectFromGUID("576ccd")
-    ressources["Green"]["solari"] = getObjectFromGUID("fa5236")
-    ressources["Yellow"]["solari"] = getObjectFromGUID("e597dc")
-    ressources["Blue"]["solari"] = getObjectFromGUID("c5c4ef")
+    ressources["Green"]["solari"] = getObjectFromGUID("e597dc")
+    ressources["Yellow"]["solari"] = getObjectFromGUID("c5c4ef")
+    ressources["Blue"]["solari"] = getObjectFromGUID("fa5236")
 
     ressources["Red"]["eau"] = getObjectFromGUID("692c4d")
-    ressources["Green"]["eau"] = getObjectFromGUID("0afaeb")
-    ressources["Yellow"]["eau"] = getObjectFromGUID("fa9522")
-    ressources["Blue"]["eau"] = getObjectFromGUID("f217d0")
+    ressources["Green"]["eau"] = getObjectFromGUID("fa9522")
+    ressources["Yellow"]["eau"] = getObjectFromGUID("f217d0")
+    ressources["Blue"]["eau"] = getObjectFromGUID("0afaeb")
 
     ressources["Red"]["leader"] = getObjectFromGUID("66cdbb")
-    ressources["Green"]["leader"] = getObjectFromGUID("cf1486")
-    ressources["Yellow"]["leader"] = getObjectFromGUID("a677e0")
-    ressources["Blue"]["leader"] = getObjectFromGUID("681774")
+    ressources["Green"]["leader"] = getObjectFromGUID("a677e0")
+    ressources["Yellow"]["leader"] = getObjectFromGUID("681774")
+    ressources["Blue"]["leader"] = getObjectFromGUID("cf1486")
 
     UI.setXml([[
 <Defaults>
@@ -47,7 +47,7 @@ function onLoad()
     <Panel class="green" color="#228822"/>
     <Panel class="yellow" color="#aaaa22"/>
     <Panel class="blue" color="#2222aa"/>
-    <Panel class="purple2" color="#800080"/>
+    <Panel class="black" color="black"/>
     <Text fontSize="20" color="white"/>
     <InputField onValueChanged="]]..self.guid..[[/changeValue" characterValidation="Integer" textColor="black" text="0" fontSize="20" alignment="MiddleCenter"/>
     <InputField class="red2" color="#cc4444"/>
@@ -106,10 +106,10 @@ function onLoad()
         </Row>
         <Row>
             <Cell><Button id="close" color="purple" text="Close" onClick="]]..self.guid..[[/close"/></Cell>
-            <Cell><Panel class="purple2"/></Cell>
-            <Cell><Panel class="purple2"/></Cell>
-            <Cell><Panel class="purple2"/></Cell>
-            <Cell><Panel class="purple2"/></Cell>
+            <Cell><Panel color="black"/></Cell>
+            <Cell><Panel color="black"/></Cell>
+            <Cell><Panel color="black"/></Cell>
+            <Cell><Panel color="black"/></Cell>
             <Cell><Button id="fetch" color="purple" text="Refresh Results" onClick="]]..self.guid..[[/reportResults"/></Cell>
             <Cell><Button id="submit" color="purple" text="Submit!" onClick="]]..self.guid..[[/sendForm"/></Cell>
         </Row>
@@ -160,8 +160,6 @@ function sendForm(submitter)
         ["entry.779373663"] = "game start timestamp", --game_start_timestamp
         ["entry.234195300"] = round, --n_rounds
 
-        -- p1 is RED
-        --UI.getAttribute("id_red", "text")
         ["entry.82402215"] = results["Red"]["id"], --p1_steam_id
         ["entry.1635429235"] = UI.getAttribute("name_red", "text"), --p1_steam_name
         ["entry.419710564"] = UI.getAttribute("rank_red", "text"), --p1_placement
@@ -174,8 +172,6 @@ function sendForm(submitter)
         ["entry.220375463"] = "", --p1_startpos
         ["entry.565786681"] = UI.getAttribute("leader_red", "text"), --p1_leader
 
-        -- p2 is GREEN
-        --UI.getAttribute("id_green", "text")
         ["entry.926384740"] = results["Green"]["id"], --p2_steam_id
         ["entry.8189124"] = UI.getAttribute("name_green", "text"), --p2_steam_name
         ["entry.829300525"] = UI.getAttribute("rank_green", "text"), --p2_placement
@@ -188,8 +184,6 @@ function sendForm(submitter)
         ["entry.516704953"] = "", --p2_startpos
         ["entry.126177821"] = UI.getAttribute("leader_green", "text"), --p2_leader
 
-        -- p3 is YELLOW
-        --UI.getAttribute("id_yellow", "text")
         ["entry.1056344986"] = results["Yellow"]["id"], --p3_steam_id
         ["entry.1000335964"] = UI.getAttribute("name_yellow", "text"), --p3_steam_name
         ["entry.1815125303"] = UI.getAttribute("rank_yellow", "text"), --p3_placement
@@ -202,8 +196,6 @@ function sendForm(submitter)
         ["entry.1730389595"] = "", --p3_startpos
         ["entry.555758857"] = UI.getAttribute("leader_yellow", "text"), --p3_leader
 
-        -- p4 is BLUE
-        --UI.getAttribute("id_blue", "text")
         ["entry.724137382"] = results["Blue"]["id"], --p4_steam_id
         ["entry.79132597"] = UI.getAttribute("name_blue", "text"), --p4_steam_name
         ["entry.1095237101"] = UI.getAttribute("rank_blue", "text"), --p4_placement

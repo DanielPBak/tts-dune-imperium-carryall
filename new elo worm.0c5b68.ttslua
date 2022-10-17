@@ -34,15 +34,15 @@ function onLoad()
     ressources["Blue"]["eau"] = getObjectFromGUID("0afaeb")
 
     ressources["Red"]["leader"] = getObjectFromGUID("66cdbb")
-    ressources["Green"]["leader"] = getObjectFromGUID("a677e0")
-    ressources["Yellow"]["leader"] = getObjectFromGUID("681774")
-    ressources["Blue"]["leader"] = getObjectFromGUID("cf1486")
+    ressources["Green"]["leader"] = getObjectFromGUID("cf1486")
+    ressources["Yellow"]["leader"] = getObjectFromGUID("a677e0")
+    ressources["Blue"]["leader"] = getObjectFromGUID("681774")
 
     UI.setXml([[
 <Defaults>
     <Panel class="Window" width="950" height="400" color="#222222ff" allowDragging="True"
         returnToOriginalPositionWhenReleased="false" outline="#404040"/>
-    <Panel class="header" color="orange"/>
+    <Panel class="header" color="black"/>
     <Panel class="red" color="#aa2222"/>
     <Panel class="green" color="#228822"/>
     <Panel class="yellow" color="#aaaa22"/>

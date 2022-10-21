@@ -1,24 +1,28 @@
 ressources = { }
 results = { }
-startTime = Time.time
+startTime = os.time()
+game_id = -1
+gameWasSubmitted = false
 
 allDefaults = [[
 <Defaults>
-    <Panel class="Window" width="950" height="400" color="#222222ff" allowDragging="True"
+    <Panel class="Window" color="#222222ff" allowDragging="True"
         returnToOriginalPositionWhenReleased="false" outline="#404040"/>
     <Panel class="header" color="black"/>
     <Panel class="red" color="#aa2222"/>
     <Panel class="green" color="#228822"/>
     <Panel class="yellow" color="#aaaa22"/>
     <Panel class="blue" color="#2222aa"/>
-    <Text fontSize="20" color="white"/>
-    <Button textColor="white" fontSize="20"/>
+    <Panel class="black" color="black"/>
+    <Text fontSize="16" color="white"/>
+    <Button color="blue" textColor="white" fontSize="20"/>
+    <InputField onValueChanged="]]..self.guid..[[/changeValue" characterValidation="Integer" textColor="black" text="0" fontSize="20" alignment="MiddleCenter"/>
+    <InputField class="red2" color="#cc4444"/>
+    <InputField class="green2" color="#44aa44"/>
+    <InputField class="yellow2" color="#cccc44"/>
+    <InputField class="blue2" color="#4444cc"/>
 </Defaults>
 ]]
-
-function agree(player, value, element)
-    broadcastToAll(player.steam_name .. " agreed")
-end
 
 function onLoad()
     self.setScale({0.40, 0.40, 0.40})
@@ -27,36 +31,21 @@ function onLoad()
     self.setLock(false)
     self.interactable = true
 
-    UI.setXml([[
-<Panel class="Window" width="100" height="100" color="#222222ff" allowDragging="True"
-        returnToOriginalPositionWhenReleased="false" outline="#404040">
-<Button color="blue" text="BEGIN" onClick="]]..self.guid..[[/step00"/>
-    </Panel>
-]])
-    self.addContextMenuItem("BEGIN", step00)
-    broadcastToAll("time: " .. startTime)
-end
+    math.randomseed(startTime)
+    game_id = tostring(math.floor(100000000000000 * math.random()))
+    log("time: " .. startTime .. ", game id: " .. game_id)
 
-function step00()
     self.clearContextMenu()
     self.addContextMenuItem("Open Score Screen", openScoreScreen)
 
     UI.setXml(allDefaults .. [[
-<Panel class="Window" id="Window">
-    <TableLayout>
-        <Row>
-        <Cell columnSpan="4"><Panel class="header"><Text>This is a ranked game! Results will be send to bleep blop. Each player must agree to continue.</Text></Panel></Cell>
-        </Row>
-        <Row>
-        <Cell><Button id="agree_Red" color="red" text="aaa" onClick="]]..self.guid..[[/openScoreScreen"/></Cell>
-        <Cell><Button id="agree_Green" color="green" text="bbb" onClick="]]..self.guid..[[/openScoreScreen"/></Cell>
-        <Cell><Button id="agree_Yellow" color="yellow" text="ccc" onClick="]]..self.guid..[[/openScoreScreen"/></Cell>
-        <Cell><Button id="agree_Blue" color="blue" text="ddd" onClick="]]..self.guid..[[/openScoreScreen"/></Cell>
-        </Row>
-    </TableLayout>
+<Panel class="Window" width="300" height="220">
+<TableLayout padding="10">
+<Row><Cell><Panel><Text>Welcome! This is a ranked game; results will be recorded on https://dune-ratings.herokuapp.com</Text></Panel></Cell></Row>
+<Row><Cell><Button id="continue" color="blue" text="Click here when all players are connected" onClick="]]..self.guid..[[/submitScreenButton"/></Cell></Row>
+</TableLayout>
 </Panel>
 ]])
-
     Wait.frames(fillStuff, 2)
 end
 
@@ -77,6 +66,14 @@ function fillStuff()
     if playerCount != 4 then
         broadcastToAll('there are not enough players')
     end
+end
+
+function submitScreenButton()
+    UI.setXml(allDefaults .. [[
+<Panel class="Window" width="80" height="80" rectAlignment="LowerRight" offsetXY="-10,60">
+<Button id="continue" color="blue" text="Open Submit Screen" onClick="]]..self.guid..[[/openScoreScreen"/>
+</Panel>
+]])
 end
 
 function openScoreScreen()
@@ -110,28 +107,12 @@ function openScoreScreen()
     ressources["Yellow"]["leader"] = getObjectFromGUID("a677e0")
     ressources["Blue"]["leader"] = getObjectFromGUID("681774")
 
-    UI.setXml([[
-<Defaults>
-    <Panel class="Window" width="950" height="400" color="#222222ff" allowDragging="True"
-        returnToOriginalPositionWhenReleased="false" outline="#404040"/>
-    <Panel class="header" color="black"/>
-    <Panel class="red" color="#aa2222"/>
-    <Panel class="green" color="#228822"/>
-    <Panel class="yellow" color="#aaaa22"/>
-    <Panel class="blue" color="#2222aa"/>
-    <Panel class="black" color="black"/>
-    <Text fontSize="20" color="white"/>
-    <InputField onValueChanged="]]..self.guid..[[/changeValue" characterValidation="Integer" textColor="black" text="0" fontSize="20" alignment="MiddleCenter"/>
-    <InputField class="red2" color="#cc4444"/>
-    <InputField class="green2" color="#44aa44"/>
-    <InputField class="yellow2" color="#cccc44"/>
-    <InputField class="blue2" color="#4444cc"/>
-    <Button textColor="white" fontSize="20"/>
-</Defaults>
-
-<Panel class="Window" id="Window">
+    UI.setXml(allDefaults .. [[
+<Panel id="Window" class="Window" width="950" height="400" color="#222222ff" allowDragging="True"
+    returnToOriginalPositionWhenReleased="false" outline="#404040">
     <TableLayout>
-        <Row>
+    <Row><Cell columnSpan="7"><Panel color="gray"><Text>SUBMIT SCREEN</Text></Panel></Cell></Row>
+    <Row>
             <Cell><Panel class="header"><Text>PLAYER</Text></Panel></Cell>
             <Cell><Panel class="header"><Text>LEADER</Text></Panel></Cell>
             <Cell><Panel class="header"><Text>RANK</Text></Panel></Cell>
@@ -177,13 +158,13 @@ function openScoreScreen()
             <Cell><InputField class="blue2" id="water_blue"/></Cell>
         </Row>
         <Row>
-            <Cell><Button id="close" color="purple" text="Close" onClick="]]..self.guid..[[/close"/></Cell>
+            <Cell><Button id="close" text="Close" onClick="]]..self.guid..[[/submitScreenButton"/></Cell>
             <Cell><Panel color="black"/></Cell>
             <Cell><Panel color="black"/></Cell>
             <Cell><Panel color="black"/></Cell>
             <Cell><Panel color="black"/></Cell>
-            <Cell><Button id="fetch" color="purple" text="Refresh Results" onClick="]]..self.guid..[[/reportResults"/></Cell>
-            <Cell><Button id="submit" color="purple" text="Submit!" onClick="]]..self.guid..[[/sendForm"/></Cell>
+            <Cell><Button id="fetch" text="Refresh Results" onClick="]]..self.guid..[[/reportResults"/></Cell>
+            <Cell><Button id="submit" text="Submit!" onClick="]]..self.guid..[[/sendForm"/></Cell>
         </Row>
     </TableLayout>
 </Panel>
@@ -199,16 +180,21 @@ function close()
     UI.setXml("")
 end
 
+function disableSubmitButton()
+    UI.setAttribute("submit", "interactable", "false")
+    UI.setAttribute("submit", "color", "purple")
+    UI.setAttribute("submit", "textColor", "yellow")
+    UI.setAttribute("submit", "text", "SUCCESS!")
+end
+
 function formCallback(request)
     if request.is_error then
         broadcastToAll('there was an error!')
         broadcastToAll(request.text)
     else
+        gameWasSubmitted = true
         broadcastToAll('form was submitted successfully')
-        UI.setAttribute("submit", "interactable", "false")
-        UI.setAttribute("submit", "color", "purple")
-        UI.setAttribute("submit", "textColor", "yellow")
-        UI.setAttribute("submit", "text", "SUCCESS!")
+        disableSubmitButton()
     end
 end
 
@@ -226,10 +212,11 @@ function sendForm(submitter)
     end
     local infoTable = {
         ["entry.2126893034"] = "1", --is_ranked
+        ["entry.447092407"] = game_id, --game_id
         ["entry.40772176"] = "1", -- carryall_version. Increment this value by 1 each release.
         ["entry.1195859029"] = submitter.steam_id, --submitter_steam_id
         ["entry.980559040"] = submitter.steam_name, --submitter_steam_name
-        ["entry.779373663"] = "game start timestamp", --game_start_timestamp
+        ["entry.779373663"] = startTime, --game_start_timestamp
         ["entry.234195300"] = round, --n_rounds
 
         ["entry.82402215"] = results["Red"]["id"], --p1_steam_id
@@ -298,6 +285,8 @@ function allGood(player)
 end
 
 function reportResults()
+    if gameWasSubmitted then disableSubmitButton() end
+
     local playerCount = 0
     if results == nil then results = { } end
     for _, player in ipairs(Player.getPlayers()) do

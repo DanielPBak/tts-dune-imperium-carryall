@@ -1,3 +1,4 @@
+playerCount = 0
 ressources = { }
 results = { }
 startTime = os.time()
@@ -38,6 +39,10 @@ function onLoad()
     self.clearContextMenu()
     self.addContextMenuItem("Open Score Screen", openScoreScreen)
 
+    firstStep()
+end
+
+function firstStep()
     UI.setXml(allDefaults .. [[
 <Panel class="Window" width="300" height="220">
 <TableLayout padding="10">
@@ -46,11 +51,11 @@ function onLoad()
 </TableLayout>
 </Panel>
 ]])
-    Wait.frames(fillStuff, 2)
 end
 
 function fillStuff()
-    local playerCount = 0
+    if playerCount == 4 then return end
+    playerCount = 0
     for _, player in ipairs(Player.getPlayers()) do
         if allGood(player) then
             local color = player.color
@@ -62,18 +67,21 @@ function fillStuff()
             playerCount = playerCount + 1
         end
     end
-
-    if playerCount != 4 then
-        broadcastToAll('there are not enough players')
-    end
 end
 
 function submitScreenButton()
-    UI.setXml(allDefaults .. [[
+    fillStuff()
+    if playerCount != 4 then
+        broadcastToAll('There are not enough players!')
+        firstStep()
+    else
+        broadcastToAll('good luck!')
+        UI.setXml(allDefaults .. [[
 <Panel class="Window" width="80" height="80" rectAlignment="LowerRight" offsetXY="-10,60">
 <Button id="continue" color="blue" text="Open Submit Screen" onClick="]]..self.guid..[[/openScoreScreen"/>
 </Panel>
-]])
+        ]])
+    end
 end
 
 function openScoreScreen()
@@ -289,20 +297,15 @@ function reportResults()
 
     local playerCount = 0
     if results == nil then results = { } end
-    for _, player in ipairs(Player.getPlayers()) do
-        if allGood(player) then
-            local color = player.color
-            results[color]["rank"] = -1
-            results[color]["points"] = ressources[color]["vptray"].call("getScore") - 1
-            results[color]["color"] = color
-            results[color]["name"] = player.steam_name
-            results[color]["leader"] = ressources[color]["leader"].getObjects()[1].getName()
-            results[color]["spice"] = ressources[color]["épices"].call("collectVal")
-            results[color]["solari"] = ressources[color]["solari"].call("collectVal")
-            results[color]["water"] = ressources[color]["eau"].call("collectVal")
-            results[color]["id"] = player.steam_id
-            playerCount = playerCount + 1
-        end
+    for _, player in pairs(results) do
+        local color = player["color"]
+        results[color]["rank"] = -1
+        results[color]["points"] = ressources[color]["vptray"].call("getScore") - 1
+        results[color]["leader"] = ressources[color]["leader"].getObjects()[1].getName()
+        results[color]["spice"] = ressources[color]["épices"].call("collectVal")
+        results[color]["solari"] = ressources[color]["solari"].call("collectVal")
+        results[color]["water"] = ressources[color]["eau"].call("collectVal")
+        playerCount = playerCount + 1
     end
 
     if playerCount < 4 then

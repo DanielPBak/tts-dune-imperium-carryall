@@ -1,13 +1,85 @@
 ressources = { }
 results = { }
+startTime = Time.time
+
+allDefaults = [[
+<Defaults>
+    <Panel class="Window" width="950" height="400" color="#222222ff" allowDragging="True"
+        returnToOriginalPositionWhenReleased="false" outline="#404040"/>
+    <Panel class="header" color="black"/>
+    <Panel class="red" color="#aa2222"/>
+    <Panel class="green" color="#228822"/>
+    <Panel class="yellow" color="#aaaa22"/>
+    <Panel class="blue" color="#2222aa"/>
+    <Text fontSize="20" color="white"/>
+    <Button textColor="white" fontSize="20"/>
+</Defaults>
+]]
+
+function agree(player, value, element)
+    broadcastToAll(player.steam_name .. " agreed")
+end
 
 function onLoad()
     self.setScale({0.40, 0.40, 0.40})
     self.setRotation({0.00, 89.66, 0.00})
     self.setPosition({5.91, -39.39, -69.69})
-    self.setLock(true)
+    self.setLock(false)
     self.interactable = true
 
+    UI.setXml([[
+<Panel class="Window" width="100" height="100" color="#222222ff" allowDragging="True"
+        returnToOriginalPositionWhenReleased="false" outline="#404040">
+<Button color="blue" text="BEGIN" onClick="]]..self.guid..[[/step00"/>
+    </Panel>
+]])
+    self.addContextMenuItem("BEGIN", step00)
+    broadcastToAll("time: " .. startTime)
+end
+
+function step00()
+    self.clearContextMenu()
+    self.addContextMenuItem("Open Score Screen", openScoreScreen)
+
+    UI.setXml(allDefaults .. [[
+<Panel class="Window" id="Window">
+    <TableLayout>
+        <Row>
+        <Cell columnSpan="4"><Panel class="header"><Text>This is a ranked game! Results will be send to bleep blop. Each player must agree to continue.</Text></Panel></Cell>
+        </Row>
+        <Row>
+        <Cell><Button id="agree_Red" color="red" text="aaa" onClick="]]..self.guid..[[/openScoreScreen"/></Cell>
+        <Cell><Button id="agree_Green" color="green" text="bbb" onClick="]]..self.guid..[[/openScoreScreen"/></Cell>
+        <Cell><Button id="agree_Yellow" color="yellow" text="ccc" onClick="]]..self.guid..[[/openScoreScreen"/></Cell>
+        <Cell><Button id="agree_Blue" color="blue" text="ddd" onClick="]]..self.guid..[[/openScoreScreen"/></Cell>
+        </Row>
+    </TableLayout>
+</Panel>
+]])
+
+    Wait.frames(fillStuff, 2)
+end
+
+function fillStuff()
+    local playerCount = 0
+    for _, player in ipairs(Player.getPlayers()) do
+        if allGood(player) then
+            local color = player.color
+            results[color] = { }
+            results[color]["color"] = color
+            results[color]["name"] = player.steam_name
+            results[color]["id"] = player.steam_id
+            UI.setAttribute("agree_" .. color, "text", player.steam_name)
+            playerCount = playerCount + 1
+        end
+    end
+
+    if playerCount != 4 then
+        broadcastToAll('there are not enough players')
+    end
+end
+
+function openScoreScreen()
     ressources["Red"] = { }
     ressources["Green"] = { }
     ressources["Yellow"] = { }
@@ -116,7 +188,7 @@ function onLoad()
     </TableLayout>
 </Panel>
 ]])
-    reportResults()
+    Wait.frames(reportResults, 2)
 end
 
 function changeValue(player, value, element)
@@ -231,7 +303,6 @@ function reportResults()
     for _, player in ipairs(Player.getPlayers()) do
         if allGood(player) then
             local color = player.color
-            results[color] = { }
             results[color]["rank"] = -1
             results[color]["points"] = ressources[color]["vptray"].call("getScore") - 1
             results[color]["color"] = color

@@ -1,7 +1,6 @@
 -- ELO Worm by grimnebulin (aka Mark Silverman)
--- Use additive load to to insert the worm into your Dune: Imperium game.
--- Visit our discord if you need help: https://discord.gg/qJk8z9pSuD
-
+-- marksilverman@gmail.com
+-- visit our discord if you need help: https://discord.gg/qJk8z9pSuD
 playerCount = 0
 ressources = { }
 results = { }
@@ -191,12 +190,43 @@ function openScoreScreen()
     Wait.frames(reportResults, 2)
 end
 
-function changeValue(player, value, element)
-    UI.setAttribute(element, "text", value)
+function lookForTies()
+    local rankList = {
+        UI.getAttribute("rank_red", "text"),
+        UI.getAttribute("rank_green", "text"),
+        UI.getAttribute("rank_yellow", "text"),
+        UI.getAttribute("rank_blue", "text") }
+    local tie = false
+    for i = 1, 3 do
+        for j = i + 1, 4 do
+            if rankList[i] == rankList[j] then
+                broadcastToAll("i: " .. i)
+                broadcastToAll("j: " .. j)
+                broadcastToAll("rankList[i]: " .. rankList[i])
+                broadcastToAll("rankList[j]: " .. rankList[j])
+                tie = true
+                break
+            end
+        end
+        if tie then break end
+    end
+    if tie then
+        broadcastToAll('ERROR: Two or more players are tied in rank. Resolve this before submitting.')
+        UI.setAttribute("submit", "interactable", "false")
+        UI.setAttribute("submit", "color", "red")
+        UI.setAttribute("submit", "textColor", "white")
+        UI.setAttribute("submit", "text", "Resolve tie first!")
+    else
+        UI.setAttribute("submit", "interactable", "true")
+        UI.setAttribute("submit", "color", "blue")
+        UI.setAttribute("submit", "textColor", "white")
+        UI.setAttribute("submit", "text", "Submit!")
+    end
 end
 
-function close()
-    UI.setXml("")
+function changeValue(player, value, element)
+    UI.setAttribute(element, "text", value)
+    Wait.frames(lookForTies, 2)
 end
 
 function disableSubmitButton()
@@ -223,7 +253,9 @@ function sendForm(submitter)
         disableSubmitButton()
         return
     end
+
     gameWasSubmitted = true
+
     local conflictCardZone = getObjectFromGUID('07e239')
     local conflictCards = conflictCardZone.getObjects()[1]
     local round = 10
@@ -316,8 +348,9 @@ function reportResults()
     if results == nil then results = { } end
     for _, player in pairs(results) do
         local color = player["color"]
+        local victoryPoints = ressources[color]["vptray"].call("getScore") - 1
         results[color]["rank"] = -1
-        results[color]["points"] = ressources[color]["vptray"].call("getScore") - 1
+        results[color]["points"] = victoryPoints
         results[color]["leader"] = ressources[color]["leader"].getObjects()[1].getName()
         results[color]["spice"] = ressources[color]["épices"].call("collectVal")
         results[color]["solari"] = ressources[color]["solari"].call("collectVal")

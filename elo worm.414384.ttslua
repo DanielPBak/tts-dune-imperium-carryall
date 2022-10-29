@@ -129,7 +129,9 @@ function openScoreScreen()
 <Panel id="Window" class="Window" width="950" height="400" color="#222222ff" allowDragging="True"
     returnToOriginalPositionWhenReleased="false" outline="#404040">
     <TableLayout>
-    <Row><Cell columnSpan="7"><Panel color="gray"><Text>NOTE: This tool doesn't know about Chaumurky or other tie-breakers (yet) but you can manually adjust the rankings (and other values) below before submitting!</Text></Panel></Cell></Row>
+    <Row><Cell><Panel color="gray"></Panel></Cell>
+    <Cell columnSpan="5"><Panel color="gray"><Text>NOTE: This tool doesn't know about Chaumurky or other tie-breakers. Manually adjust the rankings (and other values) below before submitting.</Text></Panel></Cell>
+    <Cell><Panel color="gray"></Panel></Cell></Row>
     <Row>
             <Cell><Panel class="header"><Text>PLAYER</Text></Panel></Cell>
             <Cell><Panel class="header"><Text>LEADER</Text></Panel></Cell>
@@ -191,37 +193,26 @@ function openScoreScreen()
 end
 
 function lookForTies()
-    local rankList = {
-        UI.getAttribute("rank_red", "text"),
-        UI.getAttribute("rank_green", "text"),
-        UI.getAttribute("rank_yellow", "text"),
-        UI.getAttribute("rank_blue", "text") }
-    local tie = false
+    local rankList = { UI.getAttribute("rank_red", "text"),
+                       UI.getAttribute("rank_green", "text"),
+                       UI.getAttribute("rank_yellow", "text"),
+                       UI.getAttribute("rank_blue", "text") }
     for i = 1, 3 do
         for j = i + 1, 4 do
             if rankList[i] == rankList[j] then
-                broadcastToAll("i: " .. i)
-                broadcastToAll("j: " .. j)
-                broadcastToAll("rankList[i]: " .. rankList[i])
-                broadcastToAll("rankList[j]: " .. rankList[j])
-                tie = true
-                break
+                broadcastToAll('ERROR: Two or more players are tied in rank. Resolve this before submitting.')
+                UI.setAttribute("submit", "interactable", "false")
+                UI.setAttribute("submit", "color", "red")
+                UI.setAttribute("submit", "textColor", "white")
+                UI.setAttribute("submit", "text", "Resolve tie first!")
+                return
             end
         end
-        if tie then break end
     end
-    if tie then
-        broadcastToAll('ERROR: Two or more players are tied in rank. Resolve this before submitting.')
-        UI.setAttribute("submit", "interactable", "false")
-        UI.setAttribute("submit", "color", "red")
-        UI.setAttribute("submit", "textColor", "white")
-        UI.setAttribute("submit", "text", "Resolve tie first!")
-    else
-        UI.setAttribute("submit", "interactable", "true")
-        UI.setAttribute("submit", "color", "blue")
-        UI.setAttribute("submit", "textColor", "white")
-        UI.setAttribute("submit", "text", "Submit!")
-    end
+    UI.setAttribute("submit", "interactable", "true")
+    UI.setAttribute("submit", "color", "blue")
+    UI.setAttribute("submit", "textColor", "white")
+    UI.setAttribute("submit", "text", "Submit!")
 end
 
 function changeValue(player, value, element)

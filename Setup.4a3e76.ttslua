@@ -1,0 +1,1533 @@
+-- Bundled by luabundle {"rootModuleName":"Setup.4a3e76.lua","version":"1.6.0"}
+local __bundle_require, __bundle_loaded, __bundle_register, __bundle_modules = (function(superRequire)
+	local loadingPlaceholder = {[{}] = true}
+
+	local register
+	local modules = {}
+
+	local require
+	local loaded = {}
+
+	register = function(name, body)
+		if not modules[name] then
+			modules[name] = body
+		end
+	end
+
+	require = function(name)
+		local loadedModule = loaded[name]
+
+		if loadedModule then
+			if loadedModule == loadingPlaceholder then
+				return nil
+			end
+		else
+			if not modules[name] then
+				if not superRequire then
+					local identifier = type(name) == 'string' and '\"' .. name .. '\"' or tostring(name)
+					error('Tried to require ' .. identifier .. ', but no such module has been registered')
+				else
+					return superRequire(name)
+				end
+			end
+
+			loaded[name] = loadingPlaceholder
+			loadedModule = modules[name](require, loaded, register, modules)
+			loaded[name] = loadedModule
+		end
+
+		return loadedModule
+	end
+
+	return require, loaded, register, modules
+end)(nil)
+__bundle_register("Setup.4a3e76.lua", function(require, _LOADED, __bundle_register, __bundle_modules)
+
+tournament_token = -1
+
+globalVars = require("GlobalVars")
+
+helperModule = require("HelperModule")
+
+pos_discard = globalVars.pos_discard
+
+GetDeckOrCard = helperModule.GetDeckOrCard
+
+manigance = '2b2575'
+trash = {
+    ["Green"] = getObjectFromGUID("4060b5"),
+    ["Blue"] = getObjectFromGUID("52a539"),
+    ["Yellow"] = getObjectFromGUID("7d1e07"),
+    ["Red"] = getObjectFromGUID("ea3fe1"),
+    ["Everyone"] = getObjectFromGUID("ef8614")
+}
+
+pos_black_market = globalVars.pos_black_market
+
+pos_starter_decks = {
+    {-24.62, 1.80, 20.48}, {13.68, 1.74, 20.52}, {-24.41, 1.79, -1.54},
+    {13.44, 1.74, -1.51}
+}
+
+dune_cards_decks_zone = {
+    getObjectFromGUID("e23476"), getObjectFromGUID("355dc0"),
+    getObjectFromGUID("d3521b"), getObjectFromGUID("7b2ba8")
+}
+zone_intrigue = 'a377d8'
+zone_imperium = globalVars.zone_deck_imperium
+epic_cards = {'7ae7f5', 'fbaf9f', '497c84', '30b760'}
+-- conflictZone1 = "616984"
+-- conflictZone2 = "7c9ceb"
+-- conflictZone3 = "f9ea6b"
+trashBin = '8d39ef'
+conflictDeckLocation = {-3.38, 3.11, -5.74}
+conflict1start = {-1.15, 1.76, -5.74}
+FP1 = getObjectFromGUID('66444c')
+FP2 = getObjectFromGUID('4e8873')
+FP3 = getObjectFromGUID('a6c2e0')
+FP4 = getObjectFromGUID('311255')
+yellowscore = getObjectFromGUID('20bbd1')
+greenscore = getObjectFromGUID('76039f')
+bluescore = getObjectFromGUID('1b1e76')
+redscore = getObjectFromGUID('4feaca')
+tech_tiles = getObjectFromGUID("cb766f")
+-- intrigue = getObjectFromGUID('77d25d')
+intrigue_ix = getObjectFromGUID("afa5e5")
+intrigue_immortality = getObjectFromGUID("a5dbab")
+-- imperium_deck = getObjectFromGUID('71ec7e')
+imperium_deck_ix = getObjectFromGUID('58c4c3')
+imperium_deck_immortality = getObjectFromGUID('88b666')
+tleilaxu_deck = getObjectFromGUID('36340e')
+reclaimed_forces = getObjectFromGUID('3c772c')
+bene_tleilax_zone = getObjectFromGUID('042b49')
+atomics = {'d5ff47', '0a22ec', '700023', '7e10a9'}
+experimentation_decks = {'ef9531', '45ce21', '2d935f', '8ed0cd'}
+research_station_immortality = getObjectFromGUID('54413c')
+intrigue_pos = {0.25, 1.79, 16.29}
+imperium_pos = {-10.00, 2.03, 12.87}
+hagal1P_base = "54a2cb"
+hagal1P = getObjectFromGUID("6020d0")
+hagal2P_base = "1dd8a5"
+hagal2P = getObjectFromGUID("8f8cc1")
+conflictOne = getObjectFromGUID("616984")
+conflictTwo = getObjectFromGUID("7c9ceb")
+conflictThree = getObjectFromGUID("f9ea6b")
+epicgamebutton = getObjectFromGUID("f8480b")
+pos_trash = globalVars.pos_trash_lower
+
+table_players = {
+    ["Green"] = {
+        "76039f", "a1a9a7", "866a9c", "8e22cc", "2b1cf8", "34281d", "d390dc",
+        "2dc980", "89da7d", "d7c9ba", "a67287", "fc9c62", "126c3c", "caaba4"
+    },
+    ["Blue"] = {
+        "1b1e76", "f22e20", "c64616", "49afee", "46c1c6", "68e424", "0e6e41",
+        "2a88a6", "4069d8", "426a23", "f60d9c", "694553", "b71dd9", "121bb6"
+    },
+    ["Yellow"] = {
+        "20bbd1", "c2dd31", "ef9008", "734b6e", "fd7fc7", "8fa76f", "77d7c8",
+        "a3729e", "9d0075", "489871", "b5d32e", "7c5b7b", "6af67a", "99a860"
+    },
+    ["Red"] = {
+        "4feaca", "2d1d17", "1fb4ed", "465c38", "0fa955", "e9096d", "088f51",
+        "713eae", "be464e", "acfcef", "1bbf1c", "26904f", "8ea4af", "e0ed4b"
+    }
+}
+hand_players = {
+    ["Green"] = getObjectFromGUID("482f72"),
+    ["Blue"] = getObjectFromGUID("e50f77"),
+    ["Yellow"] = getObjectFromGUID("050f39"),
+    ["Red"] = getObjectFromGUID("8a9816")
+}
+pion_reput = {
+    ["Emperor"] = {
+        ["Red"] = getObjectFromGUID('acfcef'),
+        ["Blue"] = getObjectFromGUID('426a23'),
+        ["Green"] = getObjectFromGUID('d7c9ba'),
+        ["Yellow"] = getObjectFromGUID('489871')
+    },
+    ["Guild"] = {
+        ["Red"] = getObjectFromGUID('be464e'),
+        ["Blue"] = getObjectFromGUID('4069d8'),
+        ["Green"] = getObjectFromGUID('89da7d'),
+        ["Yellow"] = getObjectFromGUID('9d0075')
+    },
+    ["Bene"] = {
+        ["Red"] = getObjectFromGUID('713eae'),
+        ["Blue"] = getObjectFromGUID('2a88a6'),
+        ["Green"] = getObjectFromGUID('2dc980'),
+        ["Yellow"] = getObjectFromGUID('a3729e')
+    },
+    ["Fremen"] = {
+        ["Red"] = getObjectFromGUID('088f51'),
+        ["Blue"] = getObjectFromGUID('0e6e41'),
+        ["Green"] = getObjectFromGUID('d390dc'),
+        ["Yellow"] = getObjectFromGUID('77d7c8')
+    }
+}
+
+-----------------Hidden Picks Var section------------------------
+leaderPositions = {
+    [1] = globalVars.yunaPos, -- initial positions of leaders on the table starting with top left Yuna, from left to right
+    [2] = globalVars.hundroPos, -- used to replace leaders on the table after moving them
+    [3] = globalVars.memnonPos,
+    [4] = globalVars.arianaPos,
+    [5] = globalVars.ilesaPos,
+    [6] = globalVars.armandPos,
+    [7] = globalVars.paulPos,
+    [8] = globalVars.letoPos,
+    [9] = globalVars.tessiaPos,
+    [10] = globalVars.rhomburPos,
+    [11] = globalVars.rabbanPos,
+    [12] = globalVars.vladPos,
+    [13] = globalVars.ilbanPos,
+    [14] = globalVars.helenaPos
+}
+-- leaders will be manipulated a lot: storing GUID only is a must
+leadersGUID = {
+    "0b6322", "6e3714", "d9daed", "4d862a", "158da6", "796f0a", "2df658",
+    "9b6cdc", "1839fa", "691ca6", "4cf050", "98cae8", "78551e", "5a8a9a"
+}
+leaderRandomizer = getObjectFromGUID("cf6ca1")
+baseGameManualPosition = {-7.677, 0, -14.917}
+-- parameter to set
+waitTimeUntilBanDelete = 5 -- How many seconds banned leaders are shown to black, and other player must wait
+numberOfBan = 6 -- default number of ban
+--
+leaderChoices = {} -- Table key:player color, value: GUID of leader picked : to adjust initial leader starting ressources when hidden pick is over
+playerOrderToPickHidingStates = {} -- Sequence of value to assign to hidingState in global: anti-clokwise starting from player before first player
+numberOfPlayer = 0 -- Didn't want to only use #seatedPlayers() since one player might disconnect during picking phase
+
+minimum_value_ban = 1 -- for number of ban buttons: value when Rise of Ix is by default on
+maximum_value_ban = 10
+-----------------End section------------------------
+
+-------- Initialize Parameter ---------
+
+button_offset_y = 0 -- Set number. Value greater than or equal to 0. Defaults to 0.10.
+button_width = 2000 -- Set number. Defaults to 450.
+button_height = 300 -- Set number. Defaults to 300.
+button_color = {0.25, 0.25, 0.25} -- Set number {Red,Green,Blue}. Value bitween 0.00 to 1.00. Defaults to {1.00,1.00,1.00] ("White").
+text_color = {1.00, 1.00, 1.00} -- Set number {Red,Green,Blue}. Value bitween 0.00 to 1.00. Defaults to {0.25,0.25,0.25] ("Black").
+text_size = 200 -- Set number. Defaults to 100.
+
+function onLoad()
+    epic_mode = 0
+    rise_of_ix = 1
+    immortality = 1
+    blitz = 0
+    black_market = 0
+    hiddenPicks = 0 -- New: if hidden pick is by default on or off
+	tournament = 0
+    activateButtons()
+    activateEpicMode()
+    activateRiseOfIx()
+    activateImmortality()
+    activateBlitz()
+    activateBlackMarket()
+    activateHiddenPicks() -- New
+    activateNumberOfBan() -- New
+	activateTournament()
+end
+
+-----------------Number of ban buttons section------------------------
+function activateNumberOfBan()
+    if hiddenPicks == 1 then
+        valueButtonParameters = {
+            click_function = 'noFunction', -- click_function is mandatory: used dummy fonction since nil wouldn't work
+            function_owner = self,
+            label = '',
+            position = {3, 0.5, 2.25},
+            width = button_height,
+            height = button_height,
+            color = "Brown",
+            font_color = text_color,
+            font_size = text_size,
+            tooltip = "Number of Leaders randomly banished"
+        }
+        self.createButton(valueButtonParameters)
+        valueButtonParameters.label = tostring(numberOfBan)
+        self.editButton(valueButtonParameters)
+        plusOneButtonParameters = {
+            click_function = 'addOne',
+            function_owner = self,
+            label = "+",
+            position = {3.7, 0.5, 2.25},
+            width = button_height,
+            height = button_height,
+            color = "Brown",
+            font_color = text_color,
+            font_size = text_size
+        }
+        self.createButton(plusOneButtonParameters)
+        minusOneButtonParameters = {
+            click_function = 'minusOne',
+            function_owner = self,
+            label = "-",
+            position = {2.3, 0.5, 2.25},
+            width = button_height,
+            height = button_height,
+            color = "Brown",
+            font_color = text_color,
+            font_size = text_size
+        }
+        self.createButton(minusOneButtonParameters)
+        activateButtons()
+    end
+end
+-----------------Number of ban buttons section------------------------
+function noFunction() -- used to make button showing number of ban do nothing when clicked on
+end
+
+function addOne()
+    numberOfBan = math.min(numberOfBan + 1, maximum_value_ban)
+    updateValue()
+end
+
+function minusOne()
+    numberOfBan = math.max(numberOfBan - 1, minimum_value_ban)
+    updateValue()
+end
+
+function updateValue()
+    valueButtonParameters.label = tostring(numberOfBan)
+    self.editButton(valueButtonParameters)
+end
+
+-----------------End Number of ban buttons section------------------------
+function activateButtons()
+    self.createButton({
+        label = "SETUP",
+        click_function = "Setup",
+        function_owner = self,
+        position = {0, 0.5, -1.4},
+        color = {1.00, 1.00, 1.00},
+        font_color = {0.25, 0.25, 0.25},
+        height = button_height * 2,
+        width = button_width,
+        font_size = text_size * 2.5,
+        rotation = {0, 0, 0}
+    })
+
+end
+
+function activateEpicMode()
+    if epic_mode == 1 then
+        self.createButton({
+            label = "EPIC MODE         [✓]",
+            click_function = "EpicMode",
+            function_owner = self,
+            position = {0, 0.5, -0.35},
+            color = {0.651, 0, 0},
+            font_color = text_color,
+            height = button_height,
+            width = 1800,
+            font_size = text_size,
+            rotation = {0, 0, 0}
+        })
+    elseif epic_mode == 0 then
+        self.createButton({
+            label = "EPIC MODE         [   ]",
+            click_function = "EpicMode",
+            function_owner = self,
+            position = {0, 0.5, -0.35},
+            color = button_color,
+            font_color = text_color,
+            height = button_height,
+            width = 1800,
+            font_size = text_size,
+            rotation = {0, 0, 0}
+        })
+    end
+end
+
+function activateRiseOfIx()
+    if rise_of_ix == 1 then
+        self.createButton({
+            label = "RISE OF IX          [✓]",
+            click_function = "RiseOfIx",
+            function_owner = self,
+            position = {0, 0.5, 0.95},
+            color = "Green",
+            font_color = text_color,
+            height = button_height,
+            width = 1800,
+            font_size = text_size,
+            rotation = {0, 0, 0}
+        })
+    elseif rise_of_ix == 0 then
+        self.createButton({
+            label = "RISE OF IX          [   ]",
+            click_function = "RiseOfIx",
+            function_owner = self,
+            position = {0, 0.5, 0.95},
+            color = button_color,
+            font_color = text_color,
+            height = button_height,
+            width = 1800,
+            font_size = text_size,
+            rotation = {0, 0, 0}
+        })
+    end
+end
+
+function activateImmortality()
+    if immortality == 1 then
+        self.createButton({
+            label = "IMMORTALITY    [✓]",
+            click_function = "Immortality",
+            function_owner = self,
+            position = {0, 0.5, 1.6},
+            color = "Green",
+            font_color = text_color,
+            height = button_height,
+            width = 1800,
+            font_size = text_size,
+            rotation = {0, 0, 0}
+        })
+    elseif immortality == 0 then
+        self.createButton({
+            label = "IMMORTALITY     [   ]",
+            click_function = "Immortality",
+            function_owner = self,
+            position = {0, 0.5, 1.6},
+            color = button_color,
+            font_color = text_color,
+            height = button_height,
+            width = 1800,
+            font_size = text_size,
+            rotation = {0, 0, 0}
+        })
+    end
+end
+
+function activateBlitz()
+    if blitz == 1 then
+        self.createButton({
+            label = "BLITZ                  [✓]",
+            click_function = "Blitz",
+            function_owner = self,
+            position = {0, 0.5, 0.3},
+            color = "Orange",
+            font_color = "White",
+            height = button_height,
+            width = 1800,
+            font_size = text_size,
+            rotation = {0, 0, 0}
+        })
+    elseif blitz == 0 then
+        self.createButton({
+            label = "BLITZ                  [   ]",
+            click_function = "Blitz",
+            function_owner = self,
+            position = {0, 0.5, 0.3},
+            color = button_color,
+            font_color = "White",
+            height = button_height,
+            width = 1800,
+            font_size = text_size,
+            rotation = {0, 0, 0}
+        })
+    end
+end
+
+function activateBlackMarket()
+    if black_market == 0 then
+        self.createButton({
+            label = "BLACK MARKET [   ]",
+            click_function = "BlackMarket",
+            function_owner = self,
+            position = {0, 0.5, 2.90},
+            color = {0, 0, 0},
+            font_color = "Grey",
+            height = button_height,
+            width = 1800,
+            font_size = text_size,
+            rotation = {0, 0, 0}
+        })
+    elseif black_market == 1 then
+        self.createButton({
+            label = "BLACK MARKET [✓]",
+            click_function = "BlackMarket",
+            function_owner = self,
+            position = {0, 0.5, 2.90},
+            color = {0, 0, 0},
+            font_color = "Yellow",
+            height = button_height,
+            width = 1800,
+            font_size = text_size,
+            rotation = {0, 0, 0}
+        })
+    end
+end
+
+-----------------New section------------------------
+function activateHiddenPicks()
+    if hiddenPicks == 1 then
+        self.createButton({
+            label = "HIDDEN PICKS   [✓]",
+            click_function = "HiddenPicks",
+            function_owner = self,
+            position = {0, 0.5, 2.25},
+            color = "Brown",
+            font_color = "White",
+            height = button_height,
+            width = 1800,
+            font_size = text_size,
+            rotation = {0, 0, 0},
+            tooltip = "Pick secretly a Leader (NO FAN MADE)"
+        })
+    elseif hiddenPicks == 0 then
+        self.createButton({
+            label = "HIDDEN PICKS   [   ]",
+            click_function = "HiddenPicks",
+            function_owner = self,
+            position = {0, 0.5, 2.25},
+            color = button_color,
+            font_color = "White",
+            height = button_height,
+            width = 1800,
+            font_size = text_size,
+            rotation = {0, 0, 0},
+            tooltip = "Pick secretly a Leader (NO FAN MADE)"
+        })
+    end
+end
+
+function activateTournament()
+	button = {
+    	["click_function"] = "Tournament",
+    	["function_owner"] = self,
+    	["position"] = {0, 0.5, 3.50},
+    	["font_color"] = text_color,
+    	["height"] = button_height,
+    	["width"] = 1800,
+    	["font_size"] = text_size
+	}
+    if tournament == 1 then
+		button["label"] = "TOURNAMENT   [✓]"
+    	button["color"] = "Green"
+    else
+		button["label"] = "TOURNAMENT   [   ]"
+        button["color"] = button_color
+    end
+    self.createButton(button)
+end
+
+function Tournament()
+    self.clearButtons()
+    if tournament == 0 then
+	    epic_mode = 0
+		blitz = 0
+	    rise_of_ix = 1
+		immortality = 0
+		hiddenPicks = 1
+		black_market = 0
+		tournament = 1
+	else
+		tournament = 0
+    end
+	activateAllButtons()
+end
+
+-----------------End section------------------------
+
+function activateAllButtons()
+    activateButtons()
+    activateEpicMode()
+    activateRiseOfIx()
+    activateImmortality()
+    activateBlitz()
+    activateBlackMarket()
+    activateHiddenPicks() -- New
+    activateNumberOfBan() -- New
+	activateTournament()
+end
+
+function EpicMode()
+    self.clearButtons()
+    -- activateButtons()
+    if epic_mode == 0 then
+        epic_mode = 1
+        rise_of_ix = 1
+        blitz = 0
+    else
+        epic_mode = 0
+    end
+    activateAllButtons()
+end
+
+function RiseOfIx()
+    self.clearButtons()
+    -- activateButtons()
+    if rise_of_ix == 0 then
+        rise_of_ix = 1
+        minimum_value_ban = 1 -- New: adjust number of ban since there is less leaders in base game
+        maximum_value_ban = 10 -- New
+        numberOfBan = math.ceil(2 * numberOfBan) -- New
+    else
+        rise_of_ix = 0
+        epic_mode = 0
+        minimum_value_ban = 1 -- New
+        maximum_value_ban = 4 -- New
+        numberOfBan = math.floor(numberOfBan / 2.6) + 1 -- janky formula: conversion between # of ban base game vs rise of ix
+    end
+    activateAllButtons()
+end
+
+function Immortality()
+    self.clearButtons()
+    -- activateButtons()
+    if immortality == 0 then
+        immortality = 1
+    else
+        immortality = 0
+    end
+    activateAllButtons()
+end
+
+function Blitz()
+    self.clearButtons()
+    -- activateButtons()
+    if blitz == 0 then
+        blitz = 1
+        epic_mode = 0
+    else
+        blitz = 0
+    end
+    activateAllButtons()
+end
+
+function BlackMarket()
+    self.clearButtons()
+    -- activateButtons()
+    if black_market == 0 then
+        black_market = 1
+    else
+        black_market = 0
+    end
+    activateAllButtons()
+end
+-----------------New section------------------------
+function HiddenPicks()
+    self.clearButtons()
+    -- activateButtons()
+    if hiddenPicks == 0 then
+        hiddenPicks = 1
+    else
+        hiddenPicks = 0
+    end
+    activateAllButtons()
+end
+-----------------End section------------------------
+function print_r(t, indent, done)
+    done = done or {}
+    indent = indent or ' '
+    local nextIndent -- Storage for next indentation value
+    for key, value in pairs(t) do
+        if type(value) == "table" and not done[value] then
+            nextIndent = nextIndent or
+                             (indent ..
+                                 string.rep(' ', string.len(tostring(key)) + 2))
+            -- Shortcut conditional allocation
+            done[value] = true
+            printToAll(indent .. "[" .. tostring(key) .. "] => Table {",
+                       {0, 0, 0});
+            printToAll(nextIndent .. "{", {0, 0, 0});
+            print_r(value, nextIndent .. string.rep(' ', 2), done)
+            printToAll(nextIndent .. "}", {0, 0, 0});
+        else
+            printToAll(indent .. "[" .. tostring(key) .. "] => " ..
+                           tostring(value) .. "", {0, 0, 0})
+        end
+    end
+end
+
+function Setup()
+    Global.call("resetRound")
+    local players = getSeatedPlayers()
+    for _, color in pairs(players) do
+        if color ~= "Red" and color ~= "Green" and color ~= "Blue" and color ~=
+            "Yellow" then
+            broadcastToAll("Some player has forbidden color", "White")
+            return 1
+        end
+    end
+    if #players < 3 and blitz == 1 then
+        broadcastToAll("Not enough players to play Blitz", "White")
+        return 1
+    end
+    self.clearButtons()
+
+    if immortality == 0 and epic_mode == 0 then
+        for i, zone in ipairs(dune_cards_decks_zone) do
+            for _, obj in ipairs(zone.getObjects()) do
+                if obj.type == "Deck" or obj.type == "Card" then
+                    obj.flip()
+                    obj.setPositionSmooth(pos_starter_decks[i], false, false)
+                end
+            end
+        end
+    end
+
+    if rise_of_ix == 0 then RemoveIxContent() end
+
+    if rise_of_ix == 1 then
+        intrigue_ix.setPosition(intrigue_pos)
+        imperium_deck_ix.setPosition(imperium_pos)
+        Wait.time(movetechdecks, 1)
+    end
+
+    if immortality == 0 then
+        imperium_deck_immortality.destruct()
+        intrigue_immortality.destruct()
+        tleilaxu_deck.destruct()
+        reclaimed_forces.destruct()
+        for _, obj in ipairs(bene_tleilax_zone.getObjects()) do
+            if obj.hasTag("BT Board") then
+                obj.destruct()
+            end
+        end
+        for _, ref in ipairs(atomics) do
+            getObjectFromGUID(ref).destruct()
+        end
+        for _, ref in ipairs(experimentation_decks) do
+            getObjectFromGUID(ref).destruct()
+        end
+        research_station_immortality.destruct()
+        -- destroy acquire buttons of tleilaxu row
+        getObjectFromGUID(globalVars.buy7_guid).destruct()
+        getObjectFromGUID(globalVars.buy8_guid).destruct()
+    end
+
+    if immortality == 1 then
+        intrigue_immortality.setPosition(intrigue_pos)
+        imperium_deck_immortality.setPosition(imperium_pos)
+        tleilaxu_deck.shuffle()
+        local deck = GetDeckOrCard(globalVars.zone_deck_tleilaxu)
+        Wait.time(function()
+            local params1 = {}
+            params1.position = globalVars.tleilaxuRow[1].pos
+            params1.rotation = {0.00, 180.00, 0.00}
+            deck.takeObject(params1)
+        end, 0.35)
+        Wait.time(function()
+            local params2 = {}
+            params2.position = globalVars.tleilaxuRow[2].pos
+            params2.rotation = {0.00, 180.00, 0.00}
+            deck.takeObject(params2)
+        end, 0.7)
+
+        for _, zone in ipairs(dune_cards_decks_zone) do
+            for _, obj in ipairs(zone.getObjects()) do
+                if obj.type == "Deck" or obj.type == "Card" then
+                    obj.destruct()
+                end
+            end
+        end
+
+        for i, ref in ipairs(experimentation_decks) do
+            local deck = getObjectFromGUID(ref)
+            deck.flip()
+            deck.setPositionSmooth(pos_starter_decks[i], false, false)
+        end
+
+        research_station_immortality.setPosition({-0.09, 1.58, 2.10})
+        research_station_immortality.setLock(true)
+    end
+
+    if blitz == 0 and epic_mode == 0 then setupConflits(4, 5, 1) end
+
+    if epic_mode == 0 then
+        for _, ref in ipairs(epic_cards) do
+            getObjectFromGUID(ref).destruct()
+        end
+    end
+
+    if epic_mode == 1 then setupEpic() end
+
+    if blitz == 1 then BlitzSetup() end
+
+    if hiddenPicks == 1 then
+        if #players > 2 then -- setPlayerHiddenLeaderPickOrder have not been generalized enough to allow 2 player bans
+
+            if rise_of_ix == 0 then
+                leaderPositions = { -- starting with Memnon top left
+                    [1] = globalVars.memnonPos,
+                    [2] = globalVars.arianaPos,
+                    [3] = globalVars.paulPos,
+                    [4] = globalVars.letoPos,
+                    [5] = globalVars.rabbanPos,
+                    [6] = globalVars.vladPos,
+                    [7] = globalVars.ilbanPos,
+                    [8] = globalVars.helenaPos
+                }
+                leadersGUID = {
+                    "d9daed", "4d862a", "2df658", "9b6cdc", "4cf050", "98cae8",
+                    "78551e", "5a8a9a"
+                }
+            end
+
+            Wait.time(moveAllLeadersToRandomizer, 1) -- move leader to randomizer for dramatic effect
+            Wait.time(banRandomLeaders, 4) -- show, pause, then remove from game random leaders
+            Wait.time(replaceLeaders, waitTimeUntilBanDelete + 4)
+        else -- remaining leader are replaced at the table in random order
+            broadcastToAll("Not enough players to play with hidden picks",
+                           "White")
+        end
+    end
+
+    Wait.time(Commune, 3)
+end
+
+function Commune()
+
+    destructMissingPlayers()
+    GetDeckOrCard(zone_intrigue).shuffle()
+    GetDeckOrCard(zone_imperium).shuffle()
+    GetDeckOrCard('6d8a2e').shuffle()
+    GetDeckOrCard('e6cfee').shuffle()
+    GetDeckOrCard('907f66').shuffle()
+    GetDeckOrCard('4f08fc').shuffle()
+    Wait.time(ImperiumDeal, 0.5)
+    Wait.time(function() getObjectFromGUID("cb0478").call("ConflictButton") end,
+              3)
+    Wait.time(function() getObjectFromGUID("d84873").call("start") end, 2)
+    -- Wait.time(function() self.destruct() end, 5)
+end
+
+-----------------Setup New functions------------------------
+
+-- called from First Player Picker when set up button is clicked: to find player leader pick order from first player and number of player
+function setPlayerHiddenLeaderPickOrder(colorPassed)
+    local firstPlayerColor = colorPassed[1]
+    numberOfPlayer = #getSeatedPlayers()
+    local arrayOfColor = {"Green", "Red", "Blue", "Yellow"}
+    local arrayOfHidingStates = {1, 2, 3, 4} -- all possible hiding states value during pick phase: see Global
+    if numberOfPlayer == 4 then
+        local indexFirstToPick = (findAnElementIndexInArray(firstPlayerColor,
+                                                            arrayOfColor) %
+                                     numberOfPlayer) + 1
+        for hiddingState in
+            cyclicIterator(indexFirstToPick, arrayOfHidingStates) do -- cyclic iterator use closure to iterate all element of array in order starting from anywhere
+            table.insert(playerOrderToPickHidingStates, hiddingState)
+        end
+    elseif numberOfPlayer == 3 then
+        local missingColor = findMissingElements(arrayOfColor,
+                                                 getSeatedPlayers())[1]
+        for i, color in ipairs(arrayOfColor) do
+            if color == missingColor then
+                table.remove(arrayOfHidingStates, i)
+                table.remove(arrayOfColor, i)
+            end
+        end
+        local indexFirstToPick = (findAnElementIndexInArray(firstPlayerColor,
+                                                            arrayOfColor) %
+                                     numberOfPlayer) + 1
+        for hiddingState in
+            cyclicIterator(indexFirstToPick, arrayOfHidingStates) do
+            table.insert(playerOrderToPickHidingStates, hiddingState)
+        end
+    end
+end
+
+function moveAllLeadersToRandomizer()
+    local t = 0 -- similar to the function setting up tech on the board
+    for _, leaderGUID in ipairs(leadersGUID) do
+        Wait.time(function()
+            leaderRandomizer.putObject(getObjectFromGUID(leaderGUID))
+        end, t)
+        t = t + 0.18
+    end
+    hidingStateToPass = {5} -- make leaders invisible to all but Black
+    Global.call("setHidingState", hidingStateToPass)
+end
+
+function banRandomLeaders()
+    broadcastToAll("Currently randomly removing " .. numberOfBan ..
+                       " leaders from the game!")
+    leaderRandomizer.shuffle()
+    local leaderToDeleteTable = {} -- temp storing leader to move after banned showned leader are "destroyed"
+    for i = 1, numberOfBan do
+        local leaderToDelete = leaderRandomizer.takeObject({
+            position = leaderPositions[i],
+            rotation = {0, 180, 0},
+            smooth = true
+        })
+        table.insert(leaderToDeleteTable, leaderToDelete)
+        removeAnElementInArray(leaderToDelete.guid, leadersGUID) -- update available leader pool
+    end
+    Wait.time(function()
+        for i = 1, numberOfBan do -- at first I tried to destroy leader, big mistake as it would make all my leader array nil
+            -- destroyObject(leaderToDeleteTable[i])         --then i tried storing only guid in leaders, still had errors. Then tried to move them in
+            fakeDestroy(leaderToDeleteTable[i]) -- trash bag: turns out object in bags loses their GUID.Then, I tried to stack banned leader
+        end -- and make them invisible, but black would still see them. Best solution was to stack them
+    end, -- inside the boardgame manual and lock them. Only asset thick enough to hide tiles. I call
+              waitTimeUntilBanDelete -- this the "Hidden Assets" method :) Leader are sill loaded in memory, and GUID still exist.
+    )
+end
+
+function fakeDestroy(objectToDestroy)
+    objectToDestroy.clearButtons()
+    objectToDestroy.setPosition(baseGameManualPosition)
+    objectToDestroy.locked = true
+end
+
+function replaceLeaders() -- called after ban phase and after player pick a leader
+    local numberOfLeaderPicked = getLengthTable(leaderChoices)
+    if numberOfLeaderPicked < numberOfPlayer then -- increment hiding state from one
+        hidingStateToPass = {
+            playerOrderToPickHidingStates[numberOfLeaderPicked + 1]
+        }
+        Global.call("setHidingState", hidingStateToPass)
+        local hidingStateToColorTable = {
+            [1] = "Green",
+            [2] = "Red",
+            [3] = "Blue",
+            [4] = "Yellow"
+        }
+        local color =
+            hidingStateToColorTable[playerOrderToPickHidingStates[numberOfLeaderPicked +
+                1]]
+        broadcastToAll("" .. color .. " is currently picking his leader.", color)
+    else
+        hidingStateToPass = {6} -- no more player to choose
+        Global.call("setHidingState", hidingStateToPass)
+        broadcastToAll("Pick phase is over. Good luck, have fun!")
+		if tournament == 1 then
+			tournament_worm = getObjectFromGUID("414384")
+			if tournament_worm == nil then
+				broadcastToAll("the tournament worm is missing!!!")
+				tournament = 0
+				return
+			end
+			tournament_worm.call("firstStep")
+		end
+    end
+    leaderRandomizer.shuffle()
+    for i = 1, #leadersGUID do
+        leaderRandomizer.takeObject({
+            position = leaderPositions[i],
+            rotation = {0, 180, 0},
+            smooth = true
+        })
+    end
+
+end
+
+function updateLeaderChoices(varPassed) -- called from the ClaimLeader in all standards Leaders: keep in memory leader picked
+    removeAnElementInArray(varPassed.leaderSelectedGUID, leadersGUID) -- update available leader pool
+    for _, leaderGUID in ipairs(leadersGUID) do -- put in randomizer+replace on the table between every leader picks: players still see cursor when other players pick
+        leaderRandomizer.putObject(getObjectFromGUID(leaderGUID))
+    end
+    leaderChoices[varPassed.playerColor] = varPassed.leaderSelectedGUID -- update leader choices
+    replaceLeaders()
+    if numberOfPlayer == getLengthTable(leaderChoices) then -- when all player picked: claim chosen Leader if it was a normal game (without hiddenPicks)+make them now visible
+        hiddenPicks = 0
+        for color, leaderChoiceGUID in pairs(leaderChoices) do
+            varToPass = {GO = leaderChoiceGUID, color = color}
+            getObjectFromGUID(leaderChoiceGUID).call("claimLeaderCall",
+                                                     varToPass)
+        end
+    end
+end
+
+----------Utiliy functions--------------
+
+function getLengthTable(table) -- determine size of an unordered table (#Table always give 0)
+    length = 0
+    for _, element in pairs(table) do length = length + 1 end
+    return length
+end
+
+function findAnElementIndexInArray(element, arrayOfElements) -- return index (or nil) of an element in an array (with distinct value)
+    local elementOrder = {}
+    for i, v in ipairs(arrayOfElements) do elementOrder[v] = i end
+    return elementOrder[element]
+end
+
+function cyclicIterator(first, Array) -- iterator that cycles through an entire array starting from any index
+    i = -1
+    return function() -- see closure + make your own iterator
+        i = i + 1
+        if i < #Array then
+            return Array[(i + first - 1) % (#Array) + 1]
+        else
+            return nil
+        end
+    end
+end
+
+function findMissingElements(Array, ArrayWithMissingElement) -- used to compare find missing player color in 3 player game
+    local A = {}
+    local MissingElements = {}
+    for _, element in ipairs(ArrayWithMissingElement) do A[element] = true end
+    for _, element in ipairs(Array) do
+        if A[element] == nil then table.insert(MissingElements, element) end
+    end
+    return MissingElements
+end
+
+function removeAnElementInArray(elementToDelete, arrayOfElements)
+    for i, element in ipairs(arrayOfElements) do
+        if element == elementToDelete then
+            table.remove(arrayOfElements, i)
+            return arrayOfElements
+        end
+    end
+end
+-----------------End section------------------------
+
+function BlitzSetup()
+    setupConflits(4, 3, 0)
+    Wait.time(function()
+        GetDeckOrCard(zone_intrigue).shuffle()
+        GetDeckOrCard(zone_imperium).shuffle()
+        GetDeckOrCard(zone_intrigue).deal(1)
+        getObjectFromGUID("e597dc").call("incrementVal")
+        getObjectFromGUID("e597dc").call("incrementVal")
+        getObjectFromGUID("c5c4ef").call("incrementVal")
+        getObjectFromGUID("c5c4ef").call("incrementVal")
+        getObjectFromGUID("fa5236").call("incrementVal")
+        getObjectFromGUID("fa5236").call("incrementVal")
+        getObjectFromGUID("576ccd").call("incrementVal")
+        getObjectFromGUID("576ccd").call("incrementVal")
+        t = 0.1
+        for i = 1, 7, 1 do
+            Wait.time(function() GetDeckOrCard(zone_imperium).deal(1) end, t)
+            t = t + 0.1
+        end
+        local players = getSeatedPlayers()
+        for _, col in pairs(players) do
+            for i = 1, 11, 1 do
+                Wait.time(function() trash[col].deal(1, col) end, 1.6)
+            end
+        end
+    end, 2)
+end
+
+function RemoveIxContent()
+    -- supprimer et remplacer
+    conflictThree.takeObject({position = pos_trash, index = 4})
+    conflictTwo.takeObject({position = pos_trash, index = 10})
+    conflictOne.takeObject({position = pos_trash, index = 4})
+    conflictOne.takeObject({position = pos_trash, index = 4})
+
+    Wait.time(function()
+        board_base = getObjectFromGUID("6b444f")
+        board_base.tooltip = false
+        board_base.setPosition({0.00, 1.53, -0.05})
+        hagal1P.destruct()
+        hagal2P.destruct()
+
+        intrigue_ix.destruct()
+        imperium_deck_ix.destruct()
+
+        -- conflictThree.destruct()
+        -- conflictTwo.destruct()
+        -- conflictOne.destruct()
+
+        fakeDestroy(getObjectFromGUID("0b6322")) -- faked destroyed some tiles to make sure they don't generate errors
+        fakeDestroy(getObjectFromGUID("6e3714"))
+        fakeDestroy(getObjectFromGUID("158da6"))
+        fakeDestroy(getObjectFromGUID("796f0a"))
+        fakeDestroy(getObjectFromGUID("1839fa"))
+        fakeDestroy(getObjectFromGUID("691ca6"))
+        fakeDestroy(getObjectFromGUID("a58ce8"))
+        fakeDestroy(getObjectFromGUID("857f74"))
+        fakeDestroy(getObjectFromGUID("bed196"))
+        fakeDestroy(getObjectFromGUID("b10897"))
+        getObjectFromGUID("a8f306").destruct()
+        getObjectFromGUID("1a3c82").destruct()
+        getObjectFromGUID("a15087").destruct()
+        getObjectFromGUID("734250").destruct()
+        getObjectFromGUID("82789e").destruct()
+        getObjectFromGUID("60f208").destruct()
+        getObjectFromGUID("5469fb").destruct()
+        getObjectFromGUID("71a414").destruct()
+        getObjectFromGUID("3371d8").destruct()
+        getObjectFromGUID("4575f3").destruct()
+        getObjectFromGUID("7b3fa2").destruct()
+        getObjectFromGUID("73a68f").destruct()
+        getObjectFromGUID("366237").destruct()
+        getObjectFromGUID("cb766f").destruct()
+        getObjectFromGUID("d75455").destruct()
+        getObjectFromGUID("2da390").destruct()
+
+        getObjectFromGUID("e9096d").setPosition({32.25, 501, 42.85})
+        getObjectFromGUID("68e424").setPosition({32.63, 501, 40.52})
+        getObjectFromGUID("34281d").setPosition({33.13, 501, 38.64})
+        getObjectFromGUID("8fa76f").setPosition({33.29, 501, 36.68})
+
+        -- getObjectFromGUID(hagal1P_base).setPosition({10.84, 2.41, 33.53}) --Commented those line because they would generate an error
+        -- getObjectFromGUID(hagal2P_base).setPosition({10.84, 2.40, 37.00})
+        getObjectFromGUID("074f6d").setPosition({-0.25, 1.52, 9.69})
+    end, 0.1)
+
+end
+
+function setupConflits(a, b, c)
+    conflictThree.shuffle()
+    conflictTwo.shuffle()
+    conflictOne.shuffle()
+    nb_conflit_iii = GetDeckOrCard("07e239").getQuantity()
+    if a < nb_conflit_iii then
+        for i = 1, a do
+            conflictThree.takeObject({position = conflictDeckLocation})
+            destroyObject(conflictThree)
+        end
+        destroyObject(conflictThree.remainder)
+    end
+    if blitz == 1 then
+        Wait.time(function()
+            trash["Everyone"].takeObject({
+                position = conflictDeckLocation,
+                rotation = {0, 180, 180},
+                smooth = false,
+                guid = manigance
+            })
+        end, 0.9)
+    end
+    Wait.time(function()
+        conflictTwo.shuffle()
+        for i = 1, b do
+            conflictTwo.takeObject({position = conflictDeckLocation})
+            destroyObject(conflictTwo)
+        end
+    end, 1)
+    Wait.time(function()
+        conflictOne.shuffle()
+        if c ~= 0 then
+            for i = 1, c do
+                conflictOne.takeObject({position = conflictDeckLocation})
+            end
+        end
+        destroyObject(conflictOne)
+    end, 2)
+end
+
+function setupEpic()
+    setupConflits(5, 5, 0)
+    replaceEpic()
+end
+
+function replaceEpic()
+
+    if immortality == 0 then
+        for i, zone in ipairs(dune_cards_decks_zone) do
+            for _, obj in ipairs(zone.getObjects()) do
+                if obj.type == "Deck" then
+                    obj.takeObject({
+                        position = pos_starter_decks[i],
+                        smooth = false,
+                        flip = true
+                    })
+                end
+            end
+        end
+
+        -- Delete the only Dune card left wich is not a container anymore so could not delete it above
+
+        Wait.time(function()
+            for i, zone in ipairs(dune_cards_decks_zone) do
+                for _, obj in ipairs(zone.getObjects()) do
+                    if obj.type == "Card" then obj.destruct() end
+                end
+            end
+        end, 0.5)
+
+        for i, ref in ipairs(epic_cards) do
+            local card = getObjectFromGUID(ref)
+            card.flip()
+            card.setPosition(pos_starter_decks[i])
+        end
+    else
+        local i = 1
+        for k, pos in pairs(pos_discard) do
+            local card = getObjectFromGUID(epic_cards[i])
+            card.setPosition(pos)
+            i = i + 1
+        end
+    end
+
+    Wait.time(movetroops, 2)
+    Wait.time(function()
+        GetDeckOrCard(zone_intrigue).shuffle()
+        GetDeckOrCard(zone_intrigue).deal(1)
+    end, 5)
+end
+
+function movetroops()
+
+    redtroop1 = getObjectFromGUID("1bbf1c")
+    redtroop2 = getObjectFromGUID("26904f")
+    greentroop1 = getObjectFromGUID("a67287")
+    greentroop2 = getObjectFromGUID("fc9c62")
+    yellowtroop1 = getObjectFromGUID("b5d32e")
+    yellowtroop2 = getObjectFromGUID("7c5b7b")
+    bluetroop1 = getObjectFromGUID("f60d9c")
+    bluetroop2 = getObjectFromGUID("694553")
+    redtroop1.setPositionSmooth({1.28, 1.75, -3.42}, false, false)
+    redtroop1.setRotation({0, 0, 0})
+    redtroop2.setPositionSmooth({1.73, 1.75, -3.42}, false, false)
+    redtroop2.setRotation({0, 0, 0})
+    greentroop1.setPositionSmooth({7.91, 1.74, -3.42}, false, false)
+    greentroop1.setRotation({0, 0, 0})
+    greentroop2.setPositionSmooth({8.36, 1.74, -3.42}, false, false)
+    greentroop2.setRotation({0, 0, 0})
+    bluetroop1.setPositionSmooth({1.28, 1.75, -6.15}, false, false)
+    bluetroop1.setRotation({0, 0, 0})
+    bluetroop2.setPositionSmooth({1.73, 1.75, -6.15}, false, false)
+    bluetroop2.setRotation({0, 0, 0})
+    yellowtroop1.setPositionSmooth({7.91, 1.74, -6.15}, false, false)
+    yellowtroop1.setRotation({0, 0, 0})
+    yellowtroop2.setPositionSmooth({8.36, 1.74, -6.15}, false, false)
+    yellowtroop2.setRotation({0, 0, 0})
+end
+
+function movetechdecks()
+    tech_tiles.randomize()
+    local t = 0
+    for i = 1, 5, 1 do
+        Wait.time(function()
+            tech_tiles.takeObject({
+                position = {9.26, 3, 16.83},
+                rotation = {0, 180, 180}
+            })
+            tech_tiles.takeObject({
+                position = {9.26, 3, 14.74},
+                rotation = {0, 180, 180}
+            })
+            tech_tiles.takeObject({
+                position = {9.26, 3, 12.66},
+                rotation = {0, 180, 180}
+            })
+        end, t)
+        t = t + 0.25
+    end
+    Wait.time(function()
+        tech_tiles.takeObject({
+            position = {9.26, 3, 16.83},
+            rotation = {0, 180, 0}
+        })
+        tech_tiles.takeObject({
+            position = {9.26, 3, 14.74},
+            rotation = {0, 180, 0}
+        })
+        tech_tiles.takeObject({
+            position = {9.26, 3, 12.66},
+            rotation = {0, 180, 0}
+        })
+        destroyObject(tech_tiles)
+    end, 1.5)
+end
+
+function ImperiumDeal()
+    local deck_imperium = GetDeckOrCard(zone_imperium)
+    deck_imperium.shuffle()
+    Wait.time(function()
+        local params1 = {}
+        params1.position = {-7.35, 2, 12.87}
+        params1.rotation = {0.00, 180.00, 0.00}
+        deck_imperium.takeObject(params1)
+    end, 0.35)
+    Wait.time(function()
+        local params2 = {}
+        params2.position = {-4.83, 2, 12.87}
+        params2.rotation = {0.00, 180.00, 0.00}
+        deck_imperium.takeObject(params2)
+    end, 0.7)
+    Wait.time(function()
+        local params3 = {}
+        params3.position = {-2.30, 2, 12.87}
+        params3.rotation = {0.00, 180.00, 0.00}
+        deck_imperium.takeObject(params3)
+    end, 1.05)
+    Wait.time(function()
+        local params4 = {}
+        params4.position = {0.29, 2, 12.87}
+        params4.rotation = {0.00, 180.00, 0.00}
+        deck_imperium.takeObject(params4)
+    end, 1.4)
+    Wait.time(function()
+        local params5 = {}
+        params5.position = {2.74, 2, 12.87}
+        params5.rotation = {0.00, 180.00, 0.00}
+        deck_imperium.takeObject(params5)
+    end, 1.75)
+    if black_market == 1 then
+        getObjectFromGUID("ab7ac5").setPosition({-6.23, 1.50, 24.45})
+        getObjectFromGUID("ab7ac5").setRotation({0, 180, 0})
+        Wait.time(function()
+            local params5 = {}
+            params5.position = pos_black_market[1]
+            params5.rotation = {0.00, 180.00, 0.00}
+            deck_imperium.takeObject(params5)
+        end, 2.1)
+        Wait.time(function()
+            local params5 = {}
+            params5.position = pos_black_market[2]
+            params5.rotation = {0.00, 180.00, 0.00}
+            deck_imperium.takeObject(params5)
+        end, 2.45)
+        Wait.time(function()
+            local params5 = {}
+            params5.position = pos_black_market[3]
+            params5.rotation = {0.00, 180.00, 0.00}
+            deck_imperium.takeObject(params5)
+        end, 2.8)
+    end
+end
+
+function destructMissingPlayers()
+    local seated_players = getSeatedPlayers()
+    for _, color in pairs(seated_players) do
+        for _, faction in pairs(pion_reput) do
+            faction[color].setLock(true)
+            faction[color].interactable = false
+        end
+    end
+
+    if #seated_players < 4 then
+        destroyObject(FP1)
+        destroyObject(FP2)
+        destroyObject(FP3)
+        destroyObject(FP4)
+        yellowscore.setPositionSmooth({10.35, 2, -10.08})
+        greenscore.setPositionSmooth({10.35, 3, -10.08})
+        bluescore.setPositionSmooth({10.35, 4, -10.08})
+        redscore.setPositionSmooth({10.35, 5, -10.08})
+    end
+    for color, _ in pairs(hand_players) do
+        if hasValue(seated_players, color) == false then
+            hand_players[color].destruct()
+        end
+    end
+    Wait.time(function()
+        for color, _ in pairs(table_players) do
+            if hasValue(seated_players, color) == false then
+                local objects = table_players[color]
+                for i, obj in ipairs(objects) do
+                    local obj1 = getObjectFromGUID(obj)
+                    obj1.setPosition({0, 200, -50})
+                    obj1.setLock(true)
+                end
+                break
+            end
+        end
+    end, 2)
+end
+
+function hasValue(tab, val)
+    for index, value in ipairs(tab) do if value == val then return index end end
+    return false
+end
+
+end)
+__bundle_register("HelperModule", function(require, _LOADED, __bundle_register, __bundle_modules)
+local helperModule = {}
+
+globalVars = require("GlobalVars")
+
+drawDeckZone = globalVars.drawDeckZone
+
+discardZone = globalVars.discardZone
+
+drawSpot = globalVars.drawSpot
+
+function helperModule.DrawOne(_, color)
+    local starterDeck = helperModule.GetDeckOrCard(drawDeckZone[color])
+    local discardFound = false
+
+    if starterDeck ~= nil then
+        starterDeck.deal(1, color)
+    else
+        discardFound = helperModule.ResetDiscard(_, color)
+        if discardFound then
+            Wait.time(function()
+                local drawDeck = helperModule.GetDeckOrCard(drawDeckZone[color])
+                drawDeck.deal(1, color)
+            end, 1.5)
+        else
+            broadcastToColor("Missing one card to draw because your discard is empty", color, color)
+        end
+    end
+    return discardFound
+end
+
+function helperModule.ResetDiscard(_, color)
+    discardArea = helperModule.GetDeckOrCard(discardZone[color])
+    local discardFound = true
+    if discardArea ~= nil then
+        discardArea.setRotationSmooth({0, 180, 180}, false, false)
+        discardArea.shuffle()
+        discardArea.setPositionSmooth(drawSpot[color], false, true)
+        Wait.frames(function()
+            drawDeck = helperModule.GetDeckOrCard(drawDeckZone[color])
+            drawDeck.shuffle()
+            drawDeck.shuffle()
+        end, 60)
+    else
+        discardFound = false
+    end
+
+    return discardFound
+
+end
+
+function helperModule.GetDeckOrCard(zoneGUID)
+    for _, obj in ipairs(getObjectFromGUID(zoneGUID).getObjects()) do
+        if obj.type == "Card" or obj.type == "Deck" then return obj end
+    end
+    return nil
+end
+
+return helperModule
+
+end)
+__bundle_register("GlobalVars", function(require, _LOADED, __bundle_register, __bundle_modules)
+local globalVars = {}
+
+globalVars.leaderPos = {
+    ["Yellow"] = {18.89, 2, -1.60},
+    ["Green"] = {19.10, 2, 20.58},
+    ["Blue"] = {-18.98, 2, -1.60},
+    ["Red"] = {-19.23, 2, 20.35}
+}
+
+globalVars.yunaPos = {-10.75, 2.23, 46.59}
+globalVars.hundroPos = {-5.25, 2.23, 46.59}
+globalVars.memnonPos = {0.25, 2.23, 46.59}
+globalVars.arianaPos = {5.75, 2.23, 46.59}
+globalVars.ilesaPos = {-10.75, 2.23, 42.59}
+globalVars.armandPos = {-5.25, 2.23, 42.59}
+globalVars.paulPos = {0.25, 2.23, 42.59}
+globalVars.letoPos = {5.75, 2.23, 42.59}
+globalVars.tessiaPos = {-10.75, 2.23, 38.59}
+globalVars.rhomburPos = {-5.25, 2.23, 38.59}
+globalVars.rabbanPos = {0.25, 2.23, 38.59}
+globalVars.vladPos = {5.75, 2.23, 38.59}
+globalVars.ilbanPos = {0.25, 2.23, 34.59}
+globalVars.helenaPos = {5.75, 2.23, 34.59}
+
+globalVars.ressources = { -- 1 : épices, 2 : solaris, 3 : eau, 4 : troupes, 5 : cartes, 6 : zone leader, 7 : swordmaster, 8 : zone swordmaster, 9 : conseiller, 10 : zone conseiller, 11 : zone bonus conseiller
+    ["Red"] = {getObjectFromGUID("3074d4"),getObjectFromGUID("576ccd"),getObjectFromGUID("692c4d"),getObjectFromGUID("8ea4af"),getObjectFromGUID("3a9e65"),getObjectFromGUID("66cdbb"),getObjectFromGUID("ed3490"),{-18.85, 1.71, 22.89},getObjectFromGUID("f19a48"),{-0.83, 3, 9.52},{-28.10, 2, 6.11}},
+    ["Blue"] = {getObjectFromGUID("9cc286"),getObjectFromGUID("fa5236"),getObjectFromGUID("0afaeb"),getObjectFromGUID("b71dd9"),getObjectFromGUID("a0bb82"),getObjectFromGUID("681774"),getObjectFromGUID("a78ad7"),{-18.94, 1.71, 1.15},getObjectFromGUID("f5b14a"),{-1.57, 3, 9.52},{-28.25, 2, -15.73}},
+    ["Green"] = {getObjectFromGUID("22478f"),getObjectFromGUID("e597dc"),getObjectFromGUID("fa9522"),getObjectFromGUID("126c3c"),getObjectFromGUID("c7fb9b"),getObjectFromGUID("cf1486"),getObjectFromGUID("fb1629"),{19.06, 1.66, 22.89},getObjectFromGUID("a0028d"),{0.82, 3, 9.52},{28.22, 2, 6.12}},
+    ["Yellow"] = {getObjectFromGUID("78fb8a"),getObjectFromGUID("c5c4ef"),getObjectFromGUID("f217d0"),getObjectFromGUID("6af67a"),getObjectFromGUID("17a08e"),getObjectFromGUID("a677e0"),getObjectFromGUID("635c49"),{18.85, 1.65, 1.15},getObjectFromGUID("1be491"),{1.55, 1.70, 9.52},{28.23, 2, -15.97}}
+}
+
+globalVars.pos_discard = {
+    ["Red"] = {-13.77, 3, 20.45},
+    ["Blue"] = {-13.65, 3, -1.50},
+    ["Green"] = {24.48, 3, 20.51},
+    ["Yellow"] = {24.25, 3, -1.50}
+}
+
+globalVars.drawDeckZone = {
+    ["Red"] = "4f08fc",
+    ["Blue"] = "907f66",
+    ["Green"] = "6d8a2e",
+    ["Yellow"] = "e6cfee"
+}
+
+globalVars.drawSpot = {
+    ["Red"] = {-24.65, 2.2, 20.36}, --location of draw snap
+    ["Blue"] = {-24.38, 2.2, -1.50},
+    ["Green"] = {13.68, 2.2, 20.52},
+    ["Yellow"] = {13.54, 2.2, -1.50},
+}
+globalVars.discardZone = {
+    ["Red"] = "e07493", --scripting zone for discard for red
+    ["Blue"] = "26bf8b",
+    ["Green"] = "2298aa",
+    ["Yellow"] = "6bb3b6",
+}
+
+globalVars.pos_black_market = {{-7.61, 2, 24.5}, {-5.05, 2, 24.5}, {-2.49, 2, 24.5}}
+
+globalVars.pos_trash_upper = {-4.27, 5, 34.54}
+
+globalVars.pos_trash_lower = {-1.92, 2, -19.65}
+
+globalVars.first_player_marker = getObjectFromGUID("1f5576")
+
+globalVars.first_player_positions =  {
+    ["Red"] = {-13.73, 1.71, 23.79},
+    ["Blue"] = {-13.79, 1.70, 1.92},
+    ["Green"] = {13.71, 1.67, 24.20},
+    ["Yellow"] = {13.49, 1.66, 1.92}
+  }
+
+globalVars.zone_deck_imperium = '8bd982'
+globalVars.zone_deck_tleilaxu = '14b2ca'
+
+globalVars.imperiumRow = {
+    {zoneGuid = '3de1d0', pos = {-7.25, 2, 12.87}},
+    {zoneGuid = '356e2c', pos = {-4.75, 2, 12.87}},
+    {zoneGuid = '7edbb3', pos = {-2.25, 2, 12.87}},
+    {zoneGuid = '641974', pos = {0.25, 2, 12.87}},
+    {zoneGuid = 'c6dbed', pos = {2.75, 2, 12.87}}
+}
+
+globalVars.tleilaxuRow = {
+    {zoneGuid = 'e5ba35', pos = {-7.59, 2, 20.04}},
+    {zoneGuid = '1e5a32', pos = {-5.04, 2, 20.04}}
+}
+
+globalVars.buy7_guid = '439df9'
+globalVars.buy8_guid = '363f98'
+
+globalVars.zone_black_market = {"323acb","e96c10","93de6d"}
+
+globalVars.reserve_troop_zone = {
+    ["Red"] = getObjectFromGUID('ab8fdf'), -- inside reserve bowl: seems bit small
+    ["Blue"] = getObjectFromGUID('2a520c'),
+    ["Green"] = getObjectFromGUID('bdfade'),
+    ["Yellow"] = getObjectFromGUID('ffbd81')
+}
+
+globalVars.pos_supply_bowls = {
+    ["Red"] = {-24.63, 4.73, 23.89},
+    ["Blue"] = {-24.26, 4.67, 1.96},
+    ["Green"] = {24.77, 4.69, 23.89},
+    ["Yellow"] = {24.45, 4.57, 1.98}
+}
+
+globalVars.pos_vp = {
+    ["Red"] = {
+        {-28.54, 2.5, 20.23}, {-28.57, 2.5, 21.26}, {-28.56, 2.5, 22.26},
+        {-28.56, 2.5, 23.26}, {-28.56, 2.5, 24.28}, {-28.57, 2.5, 25.25},
+        {-27.64, 2.5, 20.23}, {-27.62, 2.5, 21.26}, {-27.61, 2.5, 22.26},
+        {-27.64, 2.5, 23.26}, {-27.61, 2.5, 24.28}, {-27.61, 2.5, 25.25},
+        {-27.61, 4, 26.25}, {-27.61, 4, 27.25}
+    },
+    ["Blue"] = {
+        {-28.52, 2.5, -1.92}, {-28.54, 2.5, -0.89}, {-28.54, 2.5, 0.11},
+        {-28.56, 2.5, 1.12}, {-28.54, 2.5, 2.14}, {-28.54, 2.5, 3.11},
+        {-27.62, 2.5, -1.92}, {-27.6, 2.5, -0.89}, {-27.59, 2.5, 0.11},
+        {-27.61, 2.5, 1.12}, {-27.59, 2.5, 2.14}, {-27.59, 2.5, 3.11},
+        {-27.59, 4, 4.11}, {-27.59, 4, 5.11}
+    },
+    ["Green"] = {
+        {27.67, 2.5, 20.14}, {27.65, 2.5, 21.17}, {27.65, 2.5, 22.17},
+        {27.65, 2.5, 23.18}, {27.65, 2.5, 24.19}, {27.65, 2.5, 25.16},
+        {28.57, 2.5, 20.14}, {28.59, 2.5, 21.17}, {28.6, 2.5, 22.17},
+        {28.58, 2.5, 23.18}, {28.6, 2.5, 24.19}, {28.6, 2.5, 25.16},
+        {28.6, 4, 26.16}, {28.6, 4, 27.16}
+    },
+    ["Yellow"] = {
+        {27.62, 2.5, -2.10}, {27.6, 2.5, -1.08}, {27.61, 2.5, -0.07},
+        {27.6, 2.5, 0.93}, {27.61, 2.5, 1.95}, {27.6, 2.5, 2.92},
+        {28.53, 2.5, -2.10}, {28.55, 2.5, -1.08}, {28.55, 2.5, -0.07},
+        {28.53, 2.5, 0.93}, {28.56, 2.5, 1.95}, {28.56, 2.5, 2.92},
+        {28.56, 4, 3.92}, {28.56, 4, 4.92}
+    }
+}
+
+
+
+return globalVars
+
+end)
+return __bundle_require("Setup.4a3e76.lua")
